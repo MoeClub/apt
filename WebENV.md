@@ -28,3 +28,12 @@ wget --no-check-certificate -qO- 'https://moeclub.org/attachment/LinuxShell/ngin
 ```
 bash <(wget --no-check-certificate -qO- 'https://moeclub.org/attachment/LinuxShell/InstallNET.sh') -d 9 -v 64 -a
 ```
+
+# Timezone
+```
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+echo "Asia/Shanghai" >/etc/timezone
+```
+
+
+
