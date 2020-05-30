@@ -35,5 +35,13 @@ ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 echo "Asia/Shanghai" >/etc/timezone
 ```
 
+# Root
+```
+#!/bin/bash
+echo root:Vicer |sudo chpasswd root
+sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config;
+sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config;
+sudo reboot
+```
 
 
