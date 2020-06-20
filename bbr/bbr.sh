@@ -43,7 +43,7 @@ net.ipv4.tcp_retries2 = 8
 net.ipv4.icmp_echo_ignore_all = 1
 net.ipv4.tcp_timestamps = 1
 net.ipv4.tcp_slow_start_after_idle = 0
-#net.ipv4.tcp_fastopen = 3
+# net.ipv4.tcp_fastopen = 3
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 
