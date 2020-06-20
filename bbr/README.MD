@@ -6,4 +6,4 @@ v1, 减轻单线流量，浏览网页平滑。
 
 v2, 中间值
 
-bash <(wget --no-check-certificate -qO- '')
+bash <(wget --no-check-certificate -qO- 'https://github.com/MoeClub/apt/raw/master/bbr/bbr.sh')
