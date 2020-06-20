@@ -61,7 +61,7 @@ https://api.moeclub.org/GoogleDrive/1cqVl2wSGx92UTdhOxU9pW3wJgmvZMT_J
 https://api.moeclub.org/GoogleDrive/1OVA3t-ZI2arkM4E4gKvofcBN9aoVdneh
 ```
 
-# /etc/sysctl.conf
+# Linux sysctl.conf
 ```
 # This line below add by user.
 fs.file-max = 104857600
