@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ver="${0:-0}"
+ver="${1:-0}"
 [ "$ver" -gt 2 -o "$ver" -lt 0 ] && ver="0"
 
 echo "$ver"
