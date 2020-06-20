@@ -3,11 +3,11 @@
 ver="${0:-0}"
 [ "$ver" -gt 2 -o "$ver" -lt 0 ] && ver="0"
 
-bash <(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/MoeClub/BBR/master/install.sh")
-[ -d /lib/modules/4.14.153/kernel/net/ipv4 ] && cd /lib/modules/4.14.153/kernel/net/ipv4 || exit 1
-
 echo "$ver"
 exit 1
+
+bash <(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/MoeClub/BBR/master/install.sh")
+[ -d /lib/modules/4.14.153/kernel/net/ipv4 ] && cd /lib/modules/4.14.153/kernel/net/ipv4 || exit 1
 
 echo 'Download "tcp_bbr.ko" ...'
 wget --no-check-certificate -qO "tcp_bbr.ko" "https://raw.githubusercontent.com/MoeClub/apt/master/bbr/v${ver}/tcp_bbr.ko"
