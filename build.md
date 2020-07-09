@@ -12,7 +12,7 @@ make && make install
 
 ## python3
 ```
-ver="3.5.9"
+ver="3.7.8"
 wget "https://www.python.org/ftp/python/${ver}/Python-${ver}.tar.xz"
 tar -xvf "Python-${ver}.tar.xz"
 cd "Python-${ver}"
