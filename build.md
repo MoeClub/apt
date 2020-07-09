@@ -12,11 +12,20 @@ make && make install
 
 ## python3
 ```
+
+
 ver="3.7.8"
 wget "https://www.python.org/ftp/python/${ver}/Python-${ver}.tar.xz"
 tar -xvf "Python-${ver}.tar.xz"
 cd "Python-${ver}"
-./configure  --enable-optimizations --prefix=/usr
+
+# sed -i "s/^#readline/readline/g" Modules/Setup.dist
+sed -i "s/^#SSL=/SSL=\/usr/g" Modules/Setup.dist
+sed -i "s/^#_ssl/_ssl/g" Modules/Setup.dist
+sed -i "s/^#[\t]*-DUSE_SSL/-DUSE_SSL/g" Modules/Setup.dist
+sed -i "s/^#[\t]*-L\$(SSL)/-L\$(SSL)/g" Modules/Setup.dist
+
+./configure --enable-shared --prefix=/usr
 
 make && make install
 
