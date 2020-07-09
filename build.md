@@ -12,6 +12,8 @@ make && make install
 
 ## python3
 ```
+apt-get install -y zlib1g-dev libsqlite3-dev libffi-dev libreadline-dev
+
 ver="3.7.8"
 wget "https://www.python.org/ftp/python/${ver}/Python-${ver}.tar.xz"
 tar -xvf "Python-${ver}.tar.xz"
