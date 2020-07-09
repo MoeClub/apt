@@ -22,7 +22,7 @@ sed -i "s/^#_ssl/_ssl/g" Modules/Setup.dist
 sed -i "s/^#[\t]*-DUSE_SSL/-DUSE_SSL/g" Modules/Setup.dist
 sed -i "s/^#[\t]*-L\$(SSL)/-L\$(SSL)/g" Modules/Setup.dist
 
-./configure --enable-shared --with-ssl --prefix=/usr
+./configure --enable-shared --prefix=/usr
 
 make && make install
 
