@@ -4,7 +4,7 @@ ver="1.1.1g"
 wget "https://www.openssl.org/source/openssl-${ver}.tar.gz"
 tar -xvf "openssl-${ver}.tar.gz"
 cd "openssl-${ver}"
-./config --prefix=/usr
+./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
 
 make && make install
 
@@ -17,11 +17,10 @@ wget "https://www.python.org/ftp/python/${ver}/Python-${ver}.tar.xz"
 tar -xvf "Python-${ver}.tar.xz"
 cd "Python-${ver}"
 
-# sed -i "s/^#readline/readline/g" Modules/Setup.dist
-# sed -i "s/^#SSL=.*/SSL=\/usr/g" Modules/Setup.dist
-# sed -i "s/^#_ssl/_ssl/g" Modules/Setup.dist
-# sed -i "s/^#[\t]*-DUSE_SSL/-DUSE_SSL/g" Modules/Setup.dist
-# sed -i "s/^#[\t]*-L\$(SSL)/-L\$(SSL)/g" Modules/Setup.dist
+sed -i "s/^#SSL=.*/SSL=\/usr\/local\/openssl/g" Modules/Setup.dist
+sed -i "s/^#_ssl/_ssl/g" Modules/Setup.dist
+sed -i "s/^#[\t]*-DUSE_SSL/-DUSE_SSL/g" Modules/Setup.dist
+sed -i "s/^#[\t]*-L\$(SSL)/-L\$(SSL)/g" Modules/Setup.dist
 
 ./configure --enable-shared --with-ssl --prefix=/usr
 
