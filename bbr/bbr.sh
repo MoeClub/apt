@@ -3,6 +3,7 @@
 ver="${1:-0}"
 ver=`echo "$ver" |grep -o '[0-9]*' |head -n1`
 [ "$ver" -gt 2 -o "$ver" -lt 0 ] && echo 'Invalid Version.' && exit 1
+REBOOT="${2:-1}"
 
 bash <(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/MoeClub/BBR/master/install.sh")
 [ -d /lib/modules/4.14.153/kernel/net/ipv4 ] && cd /lib/modules/4.14.153/kernel/net/ipv4 || exit 1
@@ -50,4 +51,5 @@ net.ipv4.tcp_congestion_control = bbr
 
 EOF
 
-reboot
+[ "$REBOOT" -eq "1" ] && reboot
+
