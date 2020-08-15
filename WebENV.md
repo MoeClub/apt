@@ -53,12 +53,15 @@ sudo reboot
 ```
 # win7emb_x86.tar.gz:
 https://api.moeclub.org/GoogleDrive/1srhylymTjYS-Ky8uLw4R6LCWfAo1F3s7 
+https://objectstorage.ap-seoul-1.oraclecloud.com/n/cnlgjlbathzc/b/moeclub/o/win7emb_x86.tar.gz
 
 # win8.1emb_x64.tar.gz:
 https://api.moeclub.org/GoogleDrive/1cqVl2wSGx92UTdhOxU9pW3wJgmvZMT_J
+https://objectstorage.ap-seoul-1.oraclecloud.com/n/cnlgjlbathzc/b/moeclub/o/win8.1emb_x64.tar.gz
 
 # win10ltsc_x64.tar.gz:
 https://api.moeclub.org/GoogleDrive/1OVA3t-ZI2arkM4E4gKvofcBN9aoVdneh
+https://objectstorage.ap-seoul-1.oraclecloud.com/n/cnlgjlbathzc/b/moeclub/o/win10ltsc_x64.tar.gz
 ```
 
 # Linux sysctl.conf
