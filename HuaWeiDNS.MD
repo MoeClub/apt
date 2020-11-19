@@ -1,5 +1,5 @@
 
-# https://api.moeclub.org/HWDNS?key=<KEY>&secret=<SERCET>&action=[add|del|list]&target=[domain|record]&domain=<DOMAIN>&name=<SUBDOMAIN>&data=<RECORD>&type=[A|AAAA|TXT|MX|CNAME...]&ttl=15
+# `https://api.moeclub.org/HWDNS?key=<KEY>&secret=<SERCET>&action=[add|del|list]&target=[domain|record]&domain=<DOMAIN>&name=<SUBDOMAIN>&data=<RECORD>&type=[A|AAAA|TXT|MX|CNAME...]&ttl=15`
 
 
 # Usage
