@@ -1,5 +1,5 @@
 
-## `https://api.moeclub.org/HWDNS?key=<KEY>&secret=<SERCET>&action=[add|del|list]&target=[domain|record]&domain=<DOMAIN>&name=<SUBDOMAIN>&data=<RECORD>&type=[A|AAAA|TXT|MX|CNAME...]&ttl=15`
+## `https://api.moeclub.org/HWDNS?key=<KEY>&secret=<SECRET>&action=[add|del|list]&target=[domain|record]&domain=<DOMAIN>&name=<SUBDOMAIN>&data=<RECORD>&type=[A|AAAA|TXT|MX|CNAME...]&ttl=15`
 
 
 # Usage
@@ -7,7 +7,7 @@
 # 如果操作不需要, 则相关参数可以不写.
 
 key: AccessKey
-sercet: AccessSercet
+secret: AccessSecret
 action: [add|del|list]     # 操作方式: 添加, 删除, 列表
 target: [domain|record]    # 操作目标: 域名, 记录
 domain: 操作的域名           # moeclub.org
