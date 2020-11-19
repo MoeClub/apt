@@ -1,12 +1,10 @@
-# All
-```
-https://api.moeclub.org/HWDNS?key=<KEY>&secret=<SERCET>&action=[add|del|list]&target=[domain|record]&domain=<DOMAIN>&name=<SUBDOMAIN>&data=<RECORD>&type=[A|AAAA|TXT|MX|CNAME...]&ttl=15
 
-```
+# https://api.moeclub.org/HWDNS?key=<KEY>&secret=<SERCET>&action=[add|del|list]&target=[domain|record]&domain=<DOMAIN>&name=<SUBDOMAIN>&data=<RECORD>&type=[A|AAAA|TXT|MX|CNAME...]&ttl=15
+
 
 # Usage
 ```
-# 如果操作不需要参数,可以不用写.
+# 如果操作不需要, 则相关参数可以不写.
 
 key: AccessKey
 sercet: AccessSercet
