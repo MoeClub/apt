@@ -105,3 +105,10 @@ net.ipv4.tcp_slow_start_after_idle = 0
 start-stop-daemon --start --quiet --chuid "<USER>" --name "<ExecName>" --exec "<ExecPath>" -- <ARGVS>
 
 ```
+
+# scp
+```
+scp -P 22 -r <DIR> user@host:<DIR>
+
+```
+
