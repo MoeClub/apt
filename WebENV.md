@@ -100,3 +100,8 @@ net.ipv4.tcp_slow_start_after_idle = 0
 
 ```
 
+# Run with user
+```
+start-stop-daemon --start --quiet --chuid "<USER>" --name "<ExecName>" --exec "<ExecPath>" -- <ARGVS>
+
+```
