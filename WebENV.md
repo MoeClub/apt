@@ -112,3 +112,9 @@ scp -P 22 -r <DIR> user@host:<DIR>
 
 ```
 
+# rcone
+```
+./rclone copy --no-check-certificate --progress --checksum --min-size 50M --multi-thread-streams 8 --transfers 8 --drive-shared-with-me
+
+```
+
