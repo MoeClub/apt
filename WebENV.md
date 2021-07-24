@@ -118,3 +118,13 @@ scp -P 22 -r <DIR> user@host:<DIR>
 
 ```
 
+# nvm, nodejs, npm
+```
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+# nvm ls-remote | grep LTS
+nvm install v8.9.0
+npm install --global gulp-cli
+
+```
+
