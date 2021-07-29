@@ -128,3 +128,9 @@ npm install --global gulp-cli
 
 ```
 
+# nload
+```
+echo -ne 'DataFormat="Human Readable (Byte)"\nTrafficFormat="Human Readable (Byte)"\n' >/etc/nload.conf
+
+```
+
