@@ -134,3 +134,9 @@ echo -ne 'DataFormat="Human Readable (Byte)"\nTrafficFormat="Human Readable (Byt
 
 ```
 
+# ntpdate
+```
+ntpdate -4 time.windows.com time.apple.com
+
+```
+
