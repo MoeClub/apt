@@ -149,7 +149,6 @@ ntpdate -4 time.windows.com time.apple.com
 
 # journalctl
 ```
-journalctl --flush
 journalctl --rotate
 
 journalctl --vacuum-size=8M
