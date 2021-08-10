@@ -143,7 +143,16 @@ ntpdate -4 time.windows.com time.apple.com
 
 # fstab
 ```
-/dev/nvme0n1p1 /data ext4 defaults,nofail,noatime,nodiratime,nobarrier 0 2
+/dev/sdb /data ext4 defaults,nofail,noatime,nodiratime,nobarrier 0 2
 
 ```
 
+# journalctl
+```
+journalctl --flush
+journalctl --rotate
+
+journalctl --vacuum-size=8M
+journalctl --vacuum-files=1
+journalctl --vacuum-time=7d
+```
