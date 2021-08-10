@@ -141,3 +141,9 @@ ntpdate -4 time.windows.com time.apple.com
 
 ```
 
+# fstab
+```
+/dev/nvme0n1p1 /data ext4 defaults,nofail,noatime,nodiratime,nobarrier 0 2
+
+```
+
