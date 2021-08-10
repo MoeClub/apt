@@ -149,6 +149,22 @@ ntpdate -4 time.windows.com time.apple.com
 
 # journalctl
 ```
+# disable
+sed -i 's/^#\?Storage=.*/Storage=none/' /etc/systemd/journald.conf
+
+# keep & limit in memory
+sed -i 's/^#\?Storage=.*/Storage=volatile/' /etc/systemd/journald.conf
+sed -i 's/^#\?SystemMaxUse=.*/SystemMaxUse=8M/' /etc/systemd/journald.conf
+sed -i 's/^#\?RuntimeMaxUse=.*/RuntimeMaxUse=8M/' /etc/systemd/journald.conf
+
+# restart service
+systemctl restart systemd-journald
+systemctl status systemd-journald
+
+# watch 
+journalctl -f -u <service.name>
+
+# manual
 journalctl --rotate
 
 journalctl --vacuum-size=8M
