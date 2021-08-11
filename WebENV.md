@@ -178,6 +178,7 @@ echo "deb http://deb.debian.org/debian/ buster main contrib non-free" >>/etc/apt
 apt update
 DEBIAN_FRONTEND=noninteractive apt install -y nvidia-driver nvidia-cuda-toolkit nvidia-kernel-dkms firmware-misc-nonfree
 
-# vsersion=`ls -1 /usr/src |grep "^nvidia" |sed 's/^nvidia-//'`
-# dkms install -m nvidia -v ${version}
+# nvidia-smi
+# apt install -y "linux-headers-`uname -r`"
+# sudo dkms install -m `ls -1 /usr/src |grep "^nvidia" |sed 's/^nvidia-/nvidia\//'`
 ```
