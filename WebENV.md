@@ -143,7 +143,7 @@ ntpdate -4 time.windows.com time.apple.com
 
 # fstab
 ```
-dev=/dev/sdc
+dev=/dev/sdc1
 if [ -f /etc/fstab ]; then
   sed -i "/$(basename ${dev})/d" /etc/fstab
   while [ -z "$(sed -n '$p' /etc/fstab)" ]; do sed -i '$d' /etc/fstab; done
