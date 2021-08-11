@@ -143,7 +143,14 @@ ntpdate -4 time.windows.com time.apple.com
 
 # fstab
 ```
-/dev/sdb /data ext4 defaults,nofail,noatime,nodiratime,nobarrier 0 2
+dev=/dev/sdc
+if [ -f /etc/fstab ]; then
+  sed -i "/$(basename ${dev})/d" /etc/fstab
+  while [ -z "$(sed -n '$p' /etc/fstab)" ]; do sed -i '$d' /etc/fstab; done
+  sed -i "\$a${dev}\t/data\text4\tdefaults,nofail,noatime,nodiratime,nobarrier\t0\t2\n\n" /etc/fstab
+fi
+
+# /dev/sdc /data ext4 defaults,nofail,noatime,nodiratime,nobarrier 0 2
 
 ```
 
