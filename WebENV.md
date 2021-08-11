@@ -171,3 +171,13 @@ journalctl --vacuum-size=8M
 journalctl --vacuum-files=1
 journalctl --vacuum-time=7d
 ```
+
+# nvidia & cuda
+```
+echo "deb http://deb.debian.org/debian/ buster main contrib non-free" >>/etc/apt/sources.list
+apt update
+DEBIAN_FRONTEND=noninteractive apt install -y nvidia-driver nvidia-cuda-toolkit nvidia-kernel-dkms firmware-misc-nonfree
+
+# vsersion=`ls -1 /usr/src |grep "^nvidia" |sed 's/^nvidia-//'`
+# dkms install -m nvidia -v ${version}
+```
