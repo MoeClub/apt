@@ -223,11 +223,7 @@ if [[ "$ddMode" == '1' ]]; then
 fi
 
 [ -n "$ipAddr" ] && [ -n "$ipMask" ] && [ -n "$ipGate" ] && setNet='1';
-if [ "$setNet" == "1" ]; then
-  IPv4="$ipAddr";
-  MASK="$ipMask";
-  GATE="$ipGate";
-else
+if [ "$setNet" == "0" ]; then
   dependence ip
   iNet=`ip route show default |awk '{printf $NF}'`
   iAddr=`ip addr show dev $iNet |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
@@ -235,6 +231,9 @@ else
   ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
   ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
 fi
+IPv4="$ipAddr";
+MASK="$ipMask";
+GATE="$ipGate";
 
 if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
   dependence wget,awk,grep,sed,cut,cat,cpio,gzip,find,dirname,basename;
