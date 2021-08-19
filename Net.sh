@@ -621,7 +621,7 @@ d-i pkgsel/upgrade select none
 popularity-contest popularity-contest/participate boolean false
 
 d-i grub-installer/only_debian boolean true
-d-i grub-installer/bootdev string default
+#d-i grub-installer/bootdev string default
 d-i grub-installer/force-efi-extra-removable boolean true
 d-i finish-install/reboot_in_progress note
 d-i debian-installer/exit/reboot boolean true
@@ -643,9 +643,9 @@ fi
   sed -i 's/^d-i\ clock-setup\/ntp\ boolean\ true/d-i\ clock-setup\/ntp\ boolean\ false/g' /tmp/boot/preseed.cfg
 }
 
-[[ "$GRUBPATCH" == '1' ]] && {
-  sed -i 's/^d-i\ grub-installer\/bootdev\ string\ default//g' /tmp/boot/preseed.cfg
-}
+#[[ "$GRUBPATCH" == '1' ]] && {
+#  sed -i 's/^d-i\ grub-installer\/bootdev\ string\ default//g' /tmp/boot/preseed.cfg
+#}
 [[ "$GRUBPATCH" == '0' ]] && {
   sed -i 's/debconf-set\ grub-installer\/bootdev.*\"\;//g' /tmp/boot/preseed.cfg
 }
