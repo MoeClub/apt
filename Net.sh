@@ -222,12 +222,38 @@ if [[ "$ddMode" == '1' ]]; then
   tmpVER='amd64';
 fi
 
+[ -n "$ipAddr" ] && [ -n "$ipMask" ] && [ -n "$ipGate" ] && setNet='1';
+if [ "$setNet" == "1" ]; then
+  IPv4="$ipAddr";
+  MASK="$ipMask";
+  GATE="$ipGate";
+else
+  dependence ip
+  iNet=`ip route show default |awk '{printf $NF}'`
+  iAddr=`ip addr show dev $iNet |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
+  ipAddr=`echo ${iAddr} |cut -d'/' -f1`
+  ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
+  ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
+fi
+
 if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
-  dependence wget,awk,grep,sed,cut,cat,ip,cpio,gzip,find,dirname,basename;
+  dependence wget,awk,grep,sed,cut,cat,cpio,gzip,find,dirname,basename;
 elif [[ "$Relese" == 'CentOS' ]]; then
-  CheckDependence wget,awk,grep,sed,cut,cat,ip,cpio,gzip,find,dirname,basename,file,xz;
+  dependence wget,awk,grep,sed,cut,cat,cpio,gzip,find,dirname,basename,file,xz;
 fi
 [ -n "$tmpWORD" ] && dependence openssl
+[[ -n "$tmpWORD" ]] && myPASSWORD="$(openssl passwd -1 "$tmpWORD")";
+[[ -z "$myPASSWORD" ]] && myPASSWORD='$1$4BJZaD0A$y1QykUnJ6mXprENfwpseH0';
+
+if [[ "$loaderMode" == "0" ]]; then
+  [[ ! -f $GRUBDIR/$GRUBFILE ]] && echo "Error! Not Found $GRUBFILE. " && exit 1;
+
+  [[ ! -f $GRUBDIR/$GRUBFILE.old ]] && [[ -f $GRUBDIR/$GRUBFILE.bak ]] && mv -f $GRUBDIR/$GRUBFILE.bak $GRUBDIR/$GRUBFILE.old;
+  mv -f $GRUBDIR/$GRUBFILE $GRUBDIR/$GRUBFILE.bak;
+  [[ -f $GRUBDIR/$GRUBFILE.old ]] && cat $GRUBDIR/$GRUBFILE.old >$GRUBDIR/$GRUBFILE || cat $GRUBDIR/$GRUBFILE.bak >$GRUBDIR/$GRUBFILE;
+else
+  GRUBVER='2'
+fi
 
 if [[ -n "$tmpVER" ]]; then
   tmpVER="$(echo "$tmpVER" |sed -r 's/(.*)/\L\1/')";
@@ -342,17 +368,6 @@ if [[ "$ddMode" == '1' ]]; then
   fi
 fi
 
-[ -n "$ipAddr" ] && [ -n "$ipMask" ] && [ -n "$ipGate" ] && setNet='1';
-[[ -n "$tmpWORD" ]] && myPASSWORD="$(openssl passwd -1 "$tmpWORD")";
-[[ -z "$myPASSWORD" ]] && myPASSWORD='$1$4BJZaD0A$y1QykUnJ6mXprENfwpseH0';
-
-
-iNet=`ip route show default |awk '{printf $NF}'`
-iAddr=`ip addr show dev $iNet |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
-ipAddr=`echo ${iAddr} |cut -d'/' -f1`
-ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
-ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
-
 clear && echo -e "\n\033[36m# Install\033[0m\n"
 
 [[ "$ddMode" == '1' ]] && echo -ne "\033[34mAuto Mode\033[0m insatll \033[33mWindows\033[0m\n[\033[33m$DDURL\033[0m]\n"
@@ -406,5 +421,6 @@ if [[ "$linux_relese" == 'debian' ]]; then
     [[ -z "vKernel_udeb" ]] && vKernel_udeb="4.19.0-17"
   fi
 fi
+
 
 
