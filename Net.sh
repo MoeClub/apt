@@ -1,5 +1,6 @@
 #!/bin/bash
 
+[[ "$EUID" -ne '0' ]] && echo "Error:This script must be run as root!" && exit 1;
 
 function dependence(){
   Full='0';
