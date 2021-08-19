@@ -43,7 +43,6 @@ function selectMirror(){
   elif [ "$Relese" == "centos" ]; then
     TEMP="SUB_MIRROR/${DIST}/os/${VER}/isolinux/initrd.img"
   fi
-  
   [ -n "$TEMP" ] || exit 1
   mirrorStatus=0
   declare -A MirrorBackup
