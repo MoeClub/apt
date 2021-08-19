@@ -403,7 +403,7 @@ if [[ "$linux_relese" == 'debian' ]]; then
   fi
   if [[ "$ddMode" == '1' ]]; then
     vKernel_udeb=$(wget --no-check-certificate -qO- "http://$DISTMirror/dists/$DIST/main/installer-$VER/current/images/udeb.list" |grep '^acpi-modules' |head -n1 |grep -o '[0-9]\{1,2\}.[0-9]\{1,2\}.[0-9]\{1,2\}-[0-9]\{1,2\}' |head -n1)
-    [[ -z "vKernel_udeb" ]] && vKernel_udeb="3.16.0-6"
+    [[ -z "vKernel_udeb" ]] && vKernel_udeb="4.19.0-17"
   fi
 fi
 
