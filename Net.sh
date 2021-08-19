@@ -13,3 +13,10 @@ function netmask() {
   }
   echo "$m"
 }
+
+iNet=`ip route show default |awk '{printf $NF}'`
+iAddr=`ip addr show dev $iNet |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
+ipAddr=`echo ${iAddr} |cut -d'/' -f1`
+ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
+ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
+
