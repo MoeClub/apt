@@ -612,4 +612,9 @@ sed -ri 's/^#?PermitRootLogin.*/PermitRootLogin yes/g' /target/etc/ssh/sshd_conf
 sed -ri 's/^#?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config;
 EOF
 
-
+if [[ "$loaderMode" != "0" ]] && [[ "$setNet" == '0' ]]; then
+  sed -i '/netcfg\/disable_autoconfig/d' /tmp/boot/preseed.cfg
+  sed -i '/netcfg\/dhcp_options/d' /tmp/boot/preseed.cfg
+  sed -i '/netcfg\/get_.*/d' /tmp/boot/preseed.cfg
+  sed -i '/netcfg\/confirm_static/d' /tmp/boot/preseed.cfg
+fi
