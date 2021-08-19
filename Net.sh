@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function netmask() {
-  n="${1:-0}"
+  n="${1:-32}"
   b=""
   m=""
   for((i=0;i<32;i++)){
