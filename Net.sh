@@ -211,9 +211,200 @@ function netmask() {
   echo "$m"
 }
 
+[ -n "$Relese" ] || Relese='Debian'
+linux_relese=$(echo "$Relese" |sed 's/\ //g' |sed -r 's/(.*)/\L\1/')
+clear && echo -e "\n\033[36m# Check Dependence\033[0m\n"
+
+if [[ "$ddMode" == '1' ]]; then
+  CheckDependence iconv;
+  linux_relese='debian';
+  tmpDIST='bullseye';
+  tmpVER='amd64';
+fi
+
+if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
+  dependence wget,awk,grep,sed,cut,cat,ip,cpio,gzip,find,dirname,basename;
+elif [[ "$Relese" == 'CentOS' ]]; then
+  CheckDependence wget,awk,grep,sed,cut,cat,ip,cpio,gzip,find,dirname,basename,file,xz;
+fi
+[ -n "$tmpWORD" ] && dependence openssl
+
+if [[ -n "$tmpVER" ]]; then
+  tmpVER="$(echo "$tmpVER" |sed -r 's/(.*)/\L\1/')";
+  if  [[ "$tmpVER" == '32' ]] || [[ "$tmpVER" == 'i386' ]] || [[ "$tmpVER" == 'x86' ]]; then
+    VER='i386';
+  fi
+  if  [[ "$tmpVER" == '64' ]] || [[ "$tmpVER" == 'amd64' ]] || [[ "$tmpVER" == 'x86_64' ]] || [[ "$tmpVER" == 'x64' ]]; then
+    if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
+      VER='amd64';
+    elif [[ "$Relese" == 'CentOS' ]]; then
+      VER='x86_64';
+    fi
+  fi
+  if  [[ "$tmpVER" == 'arm' ]] || [[ "$tmpVER" == 'arm64' ]]; then
+    if [[ "$Relese" == 'Debian' ]]
+      VER='arm64';
+    fi
+  fi
+fi
+[ -z "$VER" ] && VER='amd64'
+
+if [[ -z "$tmpDIST" ]]; then
+  [ "$Relese" == 'Debian' ] && tmpDIST='buster';
+  [ "$Relese" == 'Ubuntu' ] && tmpDIST='bionic';
+  [ "$Relese" == 'CentOS' ] && tmpDIST='6.10';
+fi
+
+if [[ -n "$tmpDIST" ]]; then
+  if [[ "$Relese" == 'Debian' ]]; then
+    SpikCheckDIST='0'
+    DIST="$(echo "$tmpDIST" |sed -r 's/(.*)/\L\1/')";
+    echo "$DIST" |grep -q '[0-9]';
+    [[ $? -eq '0' ]] && {
+      isDigital="$(echo "$DIST" |grep -o '[\.0-9]\{1,\}' |sed -n '1h;1!H;$g;s/\n//g;$p' |cut -d'.' -f1)";
+      [[ -n $isDigital ]] && {
+        [[ "$isDigital" == '7' ]] && DIST='wheezy';
+        [[ "$isDigital" == '8' ]] && DIST='jessie';
+        [[ "$isDigital" == '9' ]] && DIST='stretch';
+        [[ "$isDigital" == '10' ]] && DIST='buster';
+        [[ "$isDigital" == '11' ]] && DIST='bullseye';
+      }
+    }
+    LinuxMirror=$(selectMirror "$Relese" "$DIST" "$VER" "$tmpMirror")
+  fi
+  if [[ "$Relese" == 'Ubuntu' ]]; then
+    SpikCheckDIST='0'
+    DIST="$(echo "$tmpDIST" |sed -r 's/(.*)/\L\1/')";
+    echo "$DIST" |grep -q '[0-9]';
+    [[ $? -eq '0' ]] && {
+      isDigital="$(echo "$DIST" |grep -o '[\.0-9]\{1,\}' |sed -n '1h;1!H;$g;s/\n//g;$p')";
+      [[ -n $isDigital ]] && {
+        [[ "$isDigital" == '12.04' ]] && DIST='precise';
+        [[ "$isDigital" == '14.04' ]] && DIST='trusty';
+        [[ "$isDigital" == '16.04' ]] && DIST='xenial';
+        [[ "$isDigital" == '18.04' ]] && DIST='bionic';
+        [[ "$isDigital" == '20.04' ]] && DIST='focal';
+      }
+    }
+    LinuxMirror=$(selectMirror "$Relese" "$DIST" "$VER" "$tmpMirror")
+  fi
+  if [[ "$Relese" == 'CentOS' ]]; then
+    SpikCheckDIST='1'
+    DISTCheck="$(echo "$tmpDIST" |grep -o '[\.0-9]\{1,\}' |head -n1)";
+    LinuxMirror=$(selectMirror "$Relese" "$DISTCheck" "$VER" "$tmpMirror")
+    ListDIST="$(wget --no-check-certificate -qO- "$LinuxMirror/dir_sizes" |cut -f2 |grep '^[0-9]')"
+    DIST="$(echo "$ListDIST" |grep "^$DISTCheck" |head -n1)"
+    [[ -z "$DIST" ]] && {
+      echo -ne '\nThe dists version not found in this mirror, Please check it! \n\n'
+      bash $0 error;
+      exit 1;
+    }
+    wget --no-check-certificate -qO- "$LinuxMirror/$DIST/os/$VER/.treeinfo" |grep -q 'general';
+    [[ $? != '0' ]] && {
+        echo -ne "\nThe version not found in this mirror, Please change mirror try again! \n\n";
+        exit 1;
+    }
+  fi
+fi
+
+if [[ -z "$LinuxMirror" ]]; then
+  echo -ne "\033[31mError! \033[0mInvaild mirror! \n"
+  [ "$Relese" == 'Debian' ] && echo -en "\033[33mexample:\033[0m http://deb.debian.org/debian\n\n";
+  [ "$Relese" == 'Ubuntu' ] && echo -en "\033[33mexample:\033[0m http://archive.ubuntu.com/ubuntu\n\n";
+  [ "$Relese" == 'CentOS' ] && echo -en "\033[33mexample:\033[0m http://mirror.centos.org/centos\n\n";
+  bash $0 error;
+  exit 1;
+fi
+
+if [[ "$SpikCheckDIST" == '0' ]]; then
+  DistsList="$(wget --no-check-certificate -qO- "$LinuxMirror/dists/" |grep -o 'href=.*/"' |cut -d'"' -f2 |sed '/-\|old\|Debian\|experimental\|stable\|test\|sid\|devel/d' |grep '^[^/]' |sed -n '1h;1!H;$g;s/\n//g;s/\//\;/g;$p')";
+  for CheckDEB in `echo "$DistsList" |sed 's/;/\n/g'`
+    do
+      [[ "$CheckDEB" == "$DIST" ]] && FindDists='1' && break;
+    done
+  [[ "$FindDists" == '0' ]] && {
+    echo -ne '\nThe dists version not found, Please check it! \n\n'
+    bash $0 error;
+    exit 1;
+  }
+fi
+
+if [[ "$ddMode" == '1' ]]; then
+  export SSL_SUPPORT='https://github.com/MoeClub/MoeClub.github.io/raw/master/lib/wget_udeb_amd64.tar.gz';
+  if [[ -n "$tmpURL" ]]; then
+    DDURL="$tmpURL"
+    echo "$DDURL" |grep -q '^http://\|^ftp://\|^https://';
+    [[ $? -ne '0' ]] && echo 'Please input vaild URL,Only support http://, ftp:// and https:// !' && exit 1;
+    [[ -n "$tmpSSL" ]] && SSL_SUPPORT="$tmpSSL";
+  else
+    echo 'Please input vaild image URL! ';
+    exit 1;
+  fi
+fi
+
+[ -n "$ipAddr" ] && [ -n "$ipMask" ] && [ -n "$ipGate" ] && setNet='1';
+[[ -n "$tmpWORD" ]] && myPASSWORD="$(openssl passwd -1 "$tmpWORD")";
+[[ -z "$myPASSWORD" ]] && myPASSWORD='$1$4BJZaD0A$y1QykUnJ6mXprENfwpseH0';
+
+
 iNet=`ip route show default |awk '{printf $NF}'`
 iAddr=`ip addr show dev $iNet |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
 ipAddr=`echo ${iAddr} |cut -d'/' -f1`
 ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
 ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
+
+clear && echo -e "\n\033[36m# Install\033[0m\n"
+
+[[ "$ddMode" == '1' ]] && echo -ne "\033[34mAuto Mode\033[0m insatll \033[33mWindows\033[0m\n[\033[33m$DDURL\033[0m]\n"
+
+
+if [[ "$linux_relese" == 'centos' ]]; then
+  if [[ "$DIST" != "$UNVER" ]]; then
+    awk 'BEGIN{print '${UNVER}'-'${DIST}'}' |grep -q '^-'
+    if [ $? != '0' ]; then
+      UNKNOWHW='1';
+      echo -en "\033[33mThe version lower then \033[31m$UNVER\033[33m may not support in auto mode! \033[0m\n";
+      if [[ "$inVNC" == 'n' ]]; then
+        echo -en "\033[35mYou can connect VNC with \033[32mPublic IP\033[35m and port \033[32m1\033[35m/\033[32m5901\033[35m in vnc viewer.\033[0m\n"
+        read -n 1 -p "Press Enter to continue..." INP
+        [[ "$INP" != '' ]] && echo -ne '\b \n\n';
+      fi
+    fi
+    awk 'BEGIN{print '${UNVER}'-'${DIST}'+0.59}' |grep -q '^-'
+    if [ $? == '0' ]; then
+      echo -en "\n\033[31mThe version higher then \033[33m6.10 \033[31mis not support in current! \033[0m\n\n"
+      exit 1;
+    fi
+  fi
+fi
+
+echo -e "\n[\033[33m$Relese\033[0m] [\033[33m$DIST\033[0m] [\033[33m$VER\033[0m] Downloading..."
+
+if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
+  wget --no-check-certificate -qO '/tmp/initrd.img' "${LinuxMirror}/dists/${DIST}/main/installer-${VER}/current/images/netboot/${linux_relese}-installer/${VER}/initrd.gz"
+  [[ $? -ne '0' ]] && echo -ne "\033[31mError! \033[0mDownload 'initrd.img' for \033[33m$linux_relese\033[0m failed! \n" && exit 1
+  wget --no-check-certificate -qO '/tmp/vmlinuz' "${LinuxMirror}/dists/${DIST}${inUpdate}/main/installer-${VER}/current/images/netboot/${linux_relese}-installer/${VER}/linux"
+  [[ $? -ne '0' ]] && echo -ne "\033[31mError! \033[0mDownload 'vmlinuz' for \033[33m$linux_relese\033[0m failed! \n" && exit 1
+  MirrorHost="$(echo "$LinuxMirror" |awk -F'://|/' '{print $2}')";
+  MirrorFolder="$(echo "$LinuxMirror" |awk -F''${MirrorHost}'' '{print $2}')";
+elif [[ "$linux_relese" == 'centos' ]]; then
+  wget --no-check-certificate -qO '/tmp/initrd.img' "${LinuxMirror}/${DIST}/os/${VER}/isolinux/initrd.img"
+  [[ $? -ne '0' ]] && echo -ne "\033[31mError! \033[0mDownload 'initrd.img' for \033[33m$linux_relese\033[0m failed! \n" && exit 1
+  wget --no-check-certificate -qO '/tmp/vmlinuz' "${LinuxMirror}/${DIST}/os/${VER}/isolinux/vmlinuz"
+  [[ $? -ne '0' ]] && echo -ne "\033[31mError! \033[0mDownload 'vmlinuz' for \033[33m$linux_relese\033[0m failed! \n" && exit 1
+else
+  bash $0 error;
+  exit 1;
+fi
+if [[ "$linux_relese" == 'debian' ]]; then
+  if [[ "$IncFirmware" == '1' ]]; then
+    wget --no-check-certificate -qO '/tmp/firmware.cpio.gz' "http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/${DIST}/current/firmware.cpio.gz"
+    [[ $? -ne '0' ]] && echo -ne "\033[31mError! \033[0mDownload 'firmware' for \033[33m$linux_relese\033[0m failed! \n" && exit 1
+  fi
+  if [[ "$ddMode" == '1' ]]; then
+    vKernel_udeb=$(wget --no-check-certificate -qO- "http://$DISTMirror/dists/$DIST/main/installer-$VER/current/images/udeb.list" |grep '^acpi-modules' |head -n1 |grep -o '[0-9]\{1,2\}.[0-9]\{1,2\}.[0-9]\{1,2\}-[0-9]\{1,2\}' |head -n1)
+    [[ -z "vKernel_udeb" ]] && vKernel_udeb="3.16.0-6"
+  fi
+fi
+
 
