@@ -230,10 +230,16 @@ if [ "$setNet" == "0" ]; then
   ipAddr=`echo ${iAddr} |cut -d'/' -f1`
   ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
   ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
+else
+  if [ -n "$interface" ]; then
+    dependence ip
+    interface=`ip route show default |awk '{printf $NF}'`
+  fi
 fi
 IPv4="$ipAddr";
 MASK="$ipMask";
 GATE="$ipGate";
+
 
 if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
   dependence wget,awk,grep,sed,cut,cat,cpio,gzip,find,dirname,basename;
@@ -547,7 +553,7 @@ cat >/tmp/boot/preseed.cfg<<EOF
 d-i debian-installer/locale string en_US
 d-i console-setup/layoutcode string us
 d-i keyboard-configuration/xkb-keymap string us
-d-i netcfg/choose_interface select $IFETH
+d-i netcfg/choose_interface select $interface
 d-i netcfg/disable_autoconfig boolean true
 d-i netcfg/dhcp_failed note
 d-i netcfg/dhcp_options select Configure network manually
