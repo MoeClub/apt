@@ -246,13 +246,10 @@ fi
 [[ -z "$myPASSWORD" ]] && myPASSWORD='$1$4BJZaD0A$y1QykUnJ6mXprENfwpseH0';
 
 if [[ "$loaderMode" == "0" ]]; then
-  [[ ! -f $GRUBDIR/$GRUBFILE ]] && echo "Error! Not Found $GRUBFILE. " && exit 1;
-
-  [[ ! -f $GRUBDIR/$GRUBFILE.old ]] && [[ -f $GRUBDIR/$GRUBFILE.bak ]] && mv -f $GRUBDIR/$GRUBFILE.bak $GRUBDIR/$GRUBFILE.old;
-  mv -f $GRUBDIR/$GRUBFILE $GRUBDIR/$GRUBFILE.bak;
-  [[ -f $GRUBDIR/$GRUBFILE.old ]] && cat $GRUBDIR/$GRUBFILE.old >$GRUBDIR/$GRUBFILE || cat $GRUBDIR/$GRUBFILE.bak >$GRUBDIR/$GRUBFILE;
-else
-  GRUBVER='2'
+  [[ -f '/boot/grub/grub.cfg' ]] && GRUBVER='0' && GRUBDIR='/boot/grub' && GRUBFILE='grub.cfg';
+  [[ -z "$GRUBDIR" ]] && [[ -f '/boot/grub2/grub.cfg' ]] && GRUBVER='0' && GRUBDIR='/boot/grub2' && GRUBFILE='grub.cfg';
+  [[ -z "$GRUBDIR" ]] && [[ -f '/boot/grub/grub.conf' ]] && GRUBVER='1' && GRUBDIR='/boot/grub' && GRUBFILE='grub.conf';
+  [ -z "$GRUBDIR" -o -z "$GRUBFILE" ] && echo -ne "Error! \nNot Found grub.\n" && exit 1;
 fi
 
 if [[ -n "$tmpVER" ]]; then
@@ -422,5 +419,197 @@ if [[ "$linux_relese" == 'debian' ]]; then
   fi
 fi
 
+if [[ "$loaderMode" == "0" ]]; then
+  [[ ! -f $GRUBDIR/$GRUBFILE ]] && echo "Error! Not Found $GRUBFILE. " && exit 1;
+
+  [[ ! -f $GRUBDIR/$GRUBFILE.old ]] && [[ -f $GRUBDIR/$GRUBFILE.bak ]] && mv -f $GRUBDIR/$GRUBFILE.bak $GRUBDIR/$GRUBFILE.old;
+  mv -f $GRUBDIR/$GRUBFILE $GRUBDIR/$GRUBFILE.bak;
+  [[ -f $GRUBDIR/$GRUBFILE.old ]] && cat $GRUBDIR/$GRUBFILE.old >$GRUBDIR/$GRUBFILE || cat $GRUBDIR/$GRUBFILE.bak >$GRUBDIR/$GRUBFILE;
+else
+  GRUBVER='2'
+fi
+
+[[ "$GRUBVER" == '0' ]] && {
+  READGRUB='/tmp/grub.read'
+  cat $GRUBDIR/$GRUBFILE |sed -n '1h;1!H;$g;s/\n/%%%%%%%/g;$p' |grep -om 1 'menuentry\ [^{]*{[^}]*}%%%%%%%' |sed 's/%%%%%%%/\n/g' >$READGRUB
+  LoadNum="$(cat $READGRUB |grep -c 'menuentry ')"
+  if [[ "$LoadNum" -eq '1' ]]; then
+    cat $READGRUB |sed '/^$/d' >/tmp/grub.new;
+  elif [[ "$LoadNum" -gt '1' ]]; then
+    CFG0="$(awk '/menuentry /{print NR}' $READGRUB|head -n 1)";
+    CFG2="$(awk '/menuentry /{print NR}' $READGRUB|head -n 2 |tail -n 1)";
+    CFG1="";
+    for tmpCFG in `awk '/}/{print NR}' $READGRUB`
+      do
+        [ "$tmpCFG" -gt "$CFG0" -a "$tmpCFG" -lt "$CFG2" ] && CFG1="$tmpCFG";
+      done
+    [[ -z "$CFG1" ]] && {
+      echo "Error! read $GRUBFILE. ";
+      exit 1;
+    }
+
+    sed -n "$CFG0,$CFG1"p $READGRUB >/tmp/grub.new;
+    [[ -f /tmp/grub.new ]] && [[ "$(grep -c '{' /tmp/grub.new)" -eq "$(grep -c '}' /tmp/grub.new)" ]] || {
+      echo -ne "\033[31mError! \033[0mNot configure $GRUBFILE. \n";
+      exit 1;
+    }
+  fi
+  [ ! -f /tmp/grub.new ] && echo "Error! $GRUBFILE. " && exit 1;
+  sed -i "/menuentry.*/c\menuentry\ \'Install OS \[$DIST\ $VER\]\'\ --class debian\ --class\ gnu-linux\ --class\ gnu\ --class\ os\ \{" /tmp/grub.new
+  sed -i "/echo.*Loading/d" /tmp/grub.new;
+  INSERTGRUB="$(awk '/menuentry /{print NR}' $GRUBDIR/$GRUBFILE|head -n 1)"
+}
+
+[[ "$GRUBVER" == '1' ]] && {
+  CFG0="$(awk '/title[\ ]|title[\t]/{print NR}' $GRUBDIR/$GRUBFILE|head -n 1)";
+  CFG1="$(awk '/title[\ ]|title[\t]/{print NR}' $GRUBDIR/$GRUBFILE|head -n 2 |tail -n 1)";
+  [[ -n $CFG0 ]] && [ -z $CFG1 -o $CFG1 == $CFG0 ] && sed -n "$CFG0,$"p $GRUBDIR/$GRUBFILE >/tmp/grub.new;
+  [[ -n $CFG0 ]] && [ -z $CFG1 -o $CFG1 != $CFG0 ] && sed -n "$CFG0,$[$CFG1-1]"p $GRUBDIR/$GRUBFILE >/tmp/grub.new;
+  [[ ! -f /tmp/grub.new ]] && echo "Error! configure append $GRUBFILE. " && exit 1;
+  sed -i "/title.*/c\title\ \'Install OS \[$DIST\ $VER\]\'" /tmp/grub.new;
+  sed -i '/^#/d' /tmp/grub.new;
+  INSERTGRUB="$(awk '/title[\ ]|title[\t]/{print NR}' $GRUBDIR/$GRUBFILE|head -n 1)"
+}
+
+if [[ "$loaderMode" == "0" ]]; then
+  [[ -n "$(grep 'linux.*/\|kernel.*/' /tmp/grub.new |awk '{print $2}' |tail -n 1 |grep '^/boot/')" ]] && Type='InBoot' || Type='NoBoot';
+
+  LinuxKernel="$(grep 'linux.*/\|kernel.*/' /tmp/grub.new |awk '{print $1}' |head -n 1)";
+  [[ -z "$LinuxKernel" ]] && echo "Error! read grub config! " && exit 1;
+  LinuxIMG="$(grep 'initrd.*/' /tmp/grub.new |awk '{print $1}' |tail -n 1)";
+  [ -z "$LinuxIMG" ] && sed -i "/$LinuxKernel.*\//a\\\tinitrd\ \/" /tmp/grub.new && LinuxIMG='initrd';
+
+  if [[ "$setInterfaceName" == "1" ]]; then
+    Add_OPTION="net.ifnames=0 biosdevname=0";
+  else
+    Add_OPTION="";
+  fi
+
+  if [[ "$setIPv6" == "1" ]]; then
+    Add_OPTION="$Add_OPTION ipv6.disable=1";
+  fi
+
+  if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
+    BOOT_OPTION="auto=true $Add_OPTION hostname=$linux_relese domain= -- quiet"
+  elif [[ "$linux_relese" == 'centos' ]]; then
+    BOOT_OPTION="ks=file://ks.cfg $Add_OPTION ksdevice=$IFETH"
+  fi
+
+  [[ "$Type" == 'InBoot' ]] && {
+    sed -i "/$LinuxKernel.*\//c\\\t$LinuxKernel\\t\/boot\/vmlinuz $BOOT_OPTION" /tmp/grub.new;
+    sed -i "/$LinuxIMG.*\//c\\\t$LinuxIMG\\t\/boot\/initrd.img" /tmp/grub.new;
+  }
+
+  [[ "$Type" == 'NoBoot' ]] && {
+    sed -i "/$LinuxKernel.*\//c\\\t$LinuxKernel\\t\/vmlinuz $BOOT_OPTION" /tmp/grub.new;
+    sed -i "/$LinuxIMG.*\//c\\\t$LinuxIMG\\t\/initrd.img" /tmp/grub.new;
+  }
+
+  sed -i '$a\\n' /tmp/grub.new;
+  
+  sed -i ''${INSERTGRUB}'i\\n' $GRUBDIR/$GRUBFILE;
+  sed -i ''${INSERTGRUB}'r /tmp/grub.new' $GRUBDIR/$GRUBFILE;
+  [[ -f  $GRUBDIR/grubenv ]] && sed -i 's/saved_entry/#saved_entry/g' $GRUBDIR/grubenv;
+fi
+
+[[ -d /tmp/boot ]] && rm -rf /tmp/boot;
+mkdir -p /tmp/boot;
+cd /tmp/boot;
+
+if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
+  COMPTYPE="gzip";
+elif [[ "$linux_relese" == 'centos' ]]; then
+  COMPTYPE="$(file ../initrd.img |grep -o ':.*compressed data' |cut -d' ' -f2 |sed -r 's/(.*)/\L\1/' |head -n1)"
+  [[ -z "$COMPTYPE" ]] && echo "Detect compressed type fail." && exit 1;
+fi
+CompDected='0'
+for COMP in `echo -en 'gzip\nlzma\nxz'`
+  do
+    if [[ "$COMPTYPE" == "$COMP" ]]; then
+      CompDected='1'
+      if [[ "$COMPTYPE" == 'gzip' ]]; then
+        NewIMG="initrd.img.gz"
+      else
+        NewIMG="initrd.img.$COMPTYPE"
+      fi
+      mv -f "/tmp/initrd.img" "/tmp/$NewIMG"
+      break;
+    fi
+  done
+[[ "$CompDected" != '1' ]] && echo "Detect compressed type not support." && exit 1;
+[[ "$COMPTYPE" == 'lzma' ]] && UNCOMP='xz --format=lzma --decompress';
+[[ "$COMPTYPE" == 'xz' ]] && UNCOMP='xz --decompress';
+[[ "$COMPTYPE" == 'gzip' ]] && UNCOMP='gzip -d';
+
+$UNCOMP < /tmp/$NewIMG | cpio --extract --verbose --make-directories --no-absolute-filenames >>/dev/null 2>&1
+
+if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
+cat >/tmp/boot/preseed.cfg<<EOF
+d-i debian-installer/locale string en_US
+d-i console-setup/layoutcode string us
+d-i keyboard-configuration/xkb-keymap string us
+d-i netcfg/choose_interface select $IFETH
+d-i netcfg/disable_autoconfig boolean true
+d-i netcfg/dhcp_failed note
+d-i netcfg/dhcp_options select Configure network manually
+d-i netcfg/get_ipaddress string $IPv4
+d-i netcfg/get_netmask string $MASK
+d-i netcfg/get_gateway string $GATE
+d-i netcfg/get_nameservers string 8.8.8.8
+d-i netcfg/no_default_route boolean true
+d-i netcfg/confirm_static boolean true
+d-i hw-detect/load_firmware boolean true
+d-i mirror/country string manual
+d-i mirror/http/hostname string $MirrorHost
+d-i mirror/http/directory string $MirrorFolder
+d-i mirror/http/proxy string
+d-i apt-setup/services-select multiselect
+d-i passwd/root-login boolean ture
+d-i passwd/make-user boolean false
+d-i passwd/root-password-crypted password $myPASSWORD
+d-i user-setup/allow-password-weak boolean true
+d-i user-setup/encrypt-home boolean false
+d-i clock-setup/utc boolean true
+d-i time/zone string US/Eastern
+d-i clock-setup/ntp boolean true
+d-i preseed/early_command string anna-install libfuse2-udeb fuse-udeb ntfs-3g-udeb fuse-modules-${vKernel_udeb}-amd64-di
+d-i partman/early_command string [[ -n "\$(blkid -t TYPE='vfat' -o device)" ]] && umount "\$(blkid -t TYPE='vfat' -o device)"; \
+debconf-set partman-auto/disk "\$(list-devices disk |head -n1)"; \
+wget -qO- '$DDURL' |gunzip -dc |/bin/dd of=\$(list-devices disk |head -n1); \
+mount.ntfs-3g \$(list-devices partition |head -n1) /mnt; \
+cd '/mnt/ProgramData/Microsoft/Windows/Start Menu/Programs'; \
+cd Start* || cd start*; \
+cp -f '/net.bat' './net.bat'; \
+/sbin/reboot; \
+debconf-set grub-installer/bootdev string "\$(list-devices disk |head -n1)"; \
+umount /media || true; \
+d-i partman/mount_style select uuid
+d-i partman-auto/init_automatically_partition select Guided - use entire disk
+d-i partman-auto/choose_recipe select All files in one partition (recommended for new users)
+d-i partman-auto/method string regular
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-auto/choose_recipe select atomic
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+d-i debian-installer/allow_unauthenticated boolean true
+tasksel tasksel/first multiselect minimal
+d-i pkgsel/update-policy select none
+d-i pkgsel/include string openssh-server
+d-i pkgsel/upgrade select none
+popularity-contest popularity-contest/participate boolean false
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/bootdev string default
+d-i grub-installer/force-efi-extra-removable boolean true
+d-i finish-install/reboot_in_progress note
+d-i debian-installer/exit/reboot boolean true
+d-i preseed/late_command string	\
+sed -ri 's/^#?PermitRootLogin.*/PermitRootLogin yes/g' /target/etc/ssh/sshd_config; \
+sed -ri 's/^#?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config;
+EOF
 
 
