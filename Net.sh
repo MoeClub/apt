@@ -177,7 +177,7 @@ function selectMirror(){
   New=$(echo "$4" |sed 's/\ //g')
   [ -n "$Relese" ] && [ -n "$DIST" ] && [ -n "$VER" ] || exit 1
   if [ "$Relese" == "debian" ] || [ "$Relese" == "ubuntu" ]; then
-    TEMP="SUB_MIRROR/dists/${DIST}/main/installer-${VER}/current/images/netboot/${relese}-installer/${VER}/initrd.gz"
+    TEMP="SUB_MIRROR/dists/${DIST}/main/installer-${VER}/current/images/netboot/${Relese}-installer/${VER}/initrd.gz"
   elif [ "$Relese" == "centos" ]; then
     TEMP="SUB_MIRROR/${DIST}/os/${VER}/isolinux/initrd.img"
   fi
@@ -189,7 +189,7 @@ function selectMirror(){
   for mirror in $(echo "${!MirrorBackup[@]}" |sed 's/\ /\n/g' |sort -n |grep "^$Relese")
     do
       Current="${MirrorBackup[$mirror]}"
-      [ -n "$CurMirror" ] || continue
+      [ -n "$Current" ] || continue
       MirrorURL=`echo "$TEMP" |sed "s#SUB_MIRROR#${Current}#g"`
       wget --no-check-certificate --spider --timeout=3 -o /dev/null "$MirrorURL"
       [ $? -eq 0 ] && mirrorStatus=1 && break
@@ -265,7 +265,7 @@ if [[ -n "$tmpVER" ]]; then
     fi
   fi
   if  [[ "$tmpVER" == 'arm' ]] || [[ "$tmpVER" == 'arm64' ]]; then
-    if [[ "$Relese" == 'Debian' ]]
+    if [[ "$Relese" == 'Debian' ]]; then
       VER='arm64';
     fi
   fi
