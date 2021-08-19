@@ -31,6 +31,35 @@ function dependence(){
   fi
 }
 
+function selectMirror(){
+  [ $# -ge 3 ] || exit 1
+  Relese=$(echo "$1" |sed -r 's/(.*)/\L\1/')
+  DIST=$(echo "$2" |sed 's/\ //g' |sed -r 's/(.*)/\L\1/')
+  VER=$(echo "$3" |sed 's/\ //g' |sed -r 's/(.*)/\L\1/')
+  New=$(echo "$4" |sed 's/\ //g')
+  [ -n "$Relese" ] && [ -n "$DIST" ] && [ -n "$VER" ] || exit 1
+  if [ "$Relese" == "debian" ] || [ "$Relese" == "ubuntu" ]; then
+    TEMP="SUB_MIRROR/dists/${DIST}/main/installer-${VER}/current/images/netboot/${relese}-installer/${VER}/initrd.gz"
+  elif [ "$Relese" == "centos" ]; then
+    TEMP="SUB_MIRROR/${DIST}/os/${VER}/isolinux/initrd.img"
+  fi
+  
+  [ -n "$TEMP" ] || exit 1
+  mirrorStatus=0
+  declare -A MirrorBackup
+  MirrorBackup=(["debian0"]="" ["debian1"]="http://deb.debian.org/debian" ["debian2"]="http://archive.debian.org/debian" ["ubuntu0"]="" ["ubuntu1"]="http://archive.ubuntu.com/ubuntu" ["centos0"]="" ["centos1"]="http://mirror.centos.org/centos" ["centos2"]="http://vault.centos.org")
+  echo "$New" |grep -q '^http://\|^https://\|^ftp://' && MirrorBackup[${Relese}0]="$New"
+  for mirror in $(echo "${!MirrorBackup[@]}" |sed 's/\ /\n/g' |sort -n |grep "^$Relese")
+    do
+      Current="${MirrorBackup[$mirror]}"
+      [ -n "$CurMirror" ] || continue
+      MirrorURL=`echo "$TEMP" |sed "s#SUB_MIRROR#${Current}#g"`
+      wget --no-check-certificate --spider --timeout=3 -o /dev/null "$MirrorURL"
+      [ $? -eq 0 ] && mirrorStatus=1 && break
+    done
+  [ $mirrorStatus -eq 1 ] && echo "$Current" || exit 1
+}
+
 function netmask() {
   n="${1:-32}"
   b=""
