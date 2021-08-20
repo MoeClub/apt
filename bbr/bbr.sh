@@ -9,7 +9,7 @@ bash <(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/MoeCl
 [ -d /lib/modules/4.14.153/kernel/net/ipv4 ] && cd /lib/modules/4.14.153/kernel/net/ipv4 || exit 1
 
 echo 'Download: tcp_bbr.ko'
-wget --no-check-certificate -qO "tcp_bbr.ko" "https://raw.githubusercontent.com/MoeClub/apt/master/bbr/v${ver}/tcp_bbr.ko"
+wget --no-check-certificate -qO "tcp_bbr.ko" "https://cdn.jsdelivr.net/gh/MoeClub/apt/bbr/v${ver}/tcp_bbr.ko"
 
 echo 'Setting: limits.conf'
 [ -f /etc/security/limits.conf ] && LIMIT='262144' && sed -i '/^\(\*\|root\)[[:space:]]*\(hard\|soft\)[[:space:]]*\(nofile\|memlock\)/d' /etc/security/limits.conf && echo -ne "*\thard\tmemlock\t${LIMIT}\n*\tsoft\tmemlock\t${LIMIT}\nroot\thard\tmemlock\t${LIMIT}\nroot\tsoft\tmemlock\t${LIMIT}\n*\thard\tnofile\t${LIMIT}\n*\tsoft\tnofile\t${LIMIT}\nroot\thard\tnofile\t${LIMIT}\nroot\tsoft\tnofile\t${LIMIT}\n\n" >>/etc/security/limits.conf
