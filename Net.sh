@@ -515,7 +515,7 @@ if [[ "$loaderMode" == "0" ]]; then
   if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
     BOOT_OPTION="auto=true $Add_OPTION hostname=$linux_relese domain= -- quiet"
   elif [[ "$linux_relese" == 'centos' ]]; then
-    BOOT_OPTION="ks=file://ks.cfg $Add_OPTION ksdevice=$IFETH"
+    BOOT_OPTION="ks=file://ks.cfg $Add_OPTION ksdevice=$interface"
   fi
 
   [[ "$Type" == 'InBoot' ]] && {
