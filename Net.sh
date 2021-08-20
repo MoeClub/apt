@@ -264,9 +264,13 @@ if [ -z "$interface" ]; then
     dependence ip
     [ -n "$interface" ] || interface=`getInterface`
 fi
-IPv4="$ipAddr";
-MASK="$ipMask";
-GATE="$ipGate";
+IPv4="$ipAddr"; MASK="$ipMask"; GATE="$ipGate";
+
+[ -n "$IPv4" ] && [ -n "$MASK" ] && [ -n "$GATE" ] && [ -n "$ipDNS" ] || {
+  echo -ne '\nError: Invalid network config\n\n'
+  bash $0 error;
+  exit 1;
+}
 
 if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
   dependence wget,awk,grep,sed,cut,cat,lsblk,cpio,gzip,find,dirname,basename;
