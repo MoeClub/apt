@@ -343,7 +343,7 @@ if [[ -n "$tmpDIST" ]]; then
       [[ -n $isDigital ]] && {
         [[ "$isDigital" == '12.04' ]] && DIST='precise';
         [[ "$isDigital" == '14.04' ]] && DIST='trusty';
-        #[[ "$isDigital" == '16.04' ]] && DIST='xenial';
+        [[ "$isDigital" == '16.04' ]] && DIST='xenial';
         [[ "$isDigital" == '18.04' ]] && DIST='bionic';
         [[ "$isDigital" == '20.04' ]] && DIST='focal';
       }
@@ -589,6 +589,7 @@ d-i netcfg/disable_autoconfig boolean true
 d-i netcfg/dhcp_failed note
 d-i netcfg/dhcp_options select Configure network manually
 d-i netcfg/get_hostname string $linux_relese
+d-i netcfg/get_domain string $linux_relese
 d-i netcfg/get_ipaddress string $IPv4
 d-i netcfg/get_netmask string $MASK
 d-i netcfg/get_gateway string $GATE
