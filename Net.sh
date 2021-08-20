@@ -115,11 +115,6 @@ while [[ $# -ge 1 ]]; do
       WinRemote="$1"
       shift
       ;;
-    -ssl)
-      shift
-      tmpSSL="$1"
-      shift
-      ;;
     -firmware)
       shift
       IncFirmware="1"
@@ -133,7 +128,7 @@ while [[ $# -ge 1 ]]; do
       shift
       setIPv6='1'
       ;;
-    -a|--auto|-m|--manual)
+    -a|--auto|-m|--manual|-ssl)
       shift
       ;;
     *)
@@ -388,18 +383,16 @@ if [[ "$SpikCheckDIST" == '0' ]]; then
   }
 fi
 
-#if [[ "$ddMode" == '1' ]]; then
-#  export SSL_SUPPORT='https://github.com/MoeClub/MoeClub.github.io/raw/master/lib/wget_udeb_amd64.tar.gz';
-#  if [[ -n "$tmpURL" ]]; then
-#    DDURL="$tmpURL"
-#    echo "$DDURL" |grep -q '^http://\|^ftp://\|^https://';
-#    [[ $? -ne '0' ]] && echo 'Please input vaild URL,Only support http://, ftp:// and https:// !' && exit 1;
-#    [[ -n "$tmpSSL" ]] && SSL_SUPPORT="$tmpSSL";
-#  else
-#    echo 'Please input vaild image URL! ';
-#    exit 1;
-#  fi
-#fi
+if [[ "$ddMode" == '1' ]]; then
+  if [[ -n "$tmpURL" ]]; then
+    DDURL="$tmpURL"
+    echo "$DDURL" |grep -q '^http://\|^ftp://\|^https://';
+    [[ $? -ne '0' ]] && echo 'Please input vaild URL,Only support http://, ftp:// and https:// !' && exit 1;
+  else
+    echo 'Please input vaild image URL! ';
+    exit 1;
+  fi
+fi
 
 clear && echo -e "\n\033[36m# Install\033[0m\n"
 
@@ -689,19 +682,6 @@ WinRDP(){
   echo -ne "cd\0040\0057d\0040\0042\0045ProgramData\0045\0057Microsoft\0057Windows\0057Start\0040Menu\0057Programs\0057Startup\0042\r\ndel\0040\0057f\0040\0057q\0040net\0056bat\r\n\r\n\r\n" >>'/tmp/boot/net.tmp';
   iconv -f 'UTF-8' -t 'GBK' '/tmp/boot/net.tmp' -o '/tmp/boot/net.bat'
   rm -rf '/tmp/boot/net.tmp'
-  echo "$DDURL" |grep -q '^https://'
-  #[[ $? -eq '0' ]] && {
-  #  echo -ne '\nAdd ssl support...\n'
-  #  [[ -n $SSL_SUPPORT ]] && {
-  #    wget --no-check-certificate -qO- "$SSL_SUPPORT" |tar -x
-  #    [[ ! -f  /tmp/boot/usr/bin/wget ]] && echo 'Error! SSL_SUPPORT.' && exit 1;
-  #    sed -i 's/wget\ -qO-/\/usr\/bin\/wget\ --no-check-certificate\ --retry-connrefused\ --tries=7\ --continue\ -qO-/g' /tmp/boot/preseed.cfg
-  #    [[ $? -eq '0' ]] && echo -ne 'Success! \n\n'
-  #  } || {
-  #  echo -ne 'Not ssl support package! \n\n';
-  #  exit 1;
-  #  }
-  #}
 }
 
 [[ "$ddMode" == '0' ]] && {
