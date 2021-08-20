@@ -701,7 +701,7 @@ WinRDP(){
   #  echo -ne 'Not ssl support package! \n\n';
   #  exit 1;
   #  }
-  }
+  #}
 }
 
 [[ "$ddMode" == '0' ]] && {
