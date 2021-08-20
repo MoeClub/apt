@@ -687,7 +687,7 @@ if [[ "$linux_relese" == 'debian' ]]; then
   sed -i 's/umount\ \/media.*true\;\ //g' /tmp/boot/preseed.cfg
   [[ -f '/tmp/firmware.cpio.gz' ]] && gzip -d < /tmp/firmware.cpio.gz | cpio --extract --verbose --make-directories --no-absolute-filenames >>/dev/null 2>&1
 else
-  [[ "$DIST" == 'bionic' ]] && sed -i '/d-i\ grub-installer\/force-efi-extra-removable/d' /tmp/boot/preseed.cfg
+  sed -i '/d-i\ grub-installer\/force-efi-extra-removable/d' /tmp/boot/preseed.cfg
 fi
 
 [[ "$ddMode" == '1' ]] && {
