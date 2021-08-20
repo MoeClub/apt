@@ -518,15 +518,8 @@ if [[ "$loaderMode" == "0" ]]; then
   LinuxIMG="$(grep 'initrd.*/' /tmp/grub.new |awk '{print $1}' |tail -n 1)";
   [ -z "$LinuxIMG" ] && sed -i "/$LinuxKernel.*\//a\\\tinitrd\ \/" /tmp/grub.new && LinuxIMG='initrd';
 
-  if [[ "$setInterfaceName" == "1" ]]; then
-    Add_OPTION="net.ifnames=0 biosdevname=0";
-  else
-    Add_OPTION="";
-  fi
-
-  if [[ "$setIPv6" == "1" ]]; then
-    Add_OPTION="$Add_OPTION ipv6.disable=1";
-  fi
+  [[ "$setInterfaceName" == "1" ]] && Add_OPTION="net.ifnames=0 biosdevname=0" || Add_OPTION=""
+  [[ "$setIPv6" == "1" ]] && Add_OPTION="$Add_OPTION ipv6.disable=1"
 
   if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
     BOOT_OPTION="auto=true $Add_OPTION hostname=$linux_relese domain= -- quiet"
