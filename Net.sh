@@ -588,6 +588,7 @@ d-i netcfg/choose_interface select $interface
 d-i netcfg/disable_autoconfig boolean true
 d-i netcfg/dhcp_failed note
 d-i netcfg/dhcp_options select Configure network manually
+d-i netcfg/get_hostname string $linux_relese
 d-i netcfg/get_ipaddress string $IPv4
 d-i netcfg/get_netmask string $MASK
 d-i netcfg/get_gateway string $GATE
