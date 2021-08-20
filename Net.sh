@@ -17,6 +17,7 @@ export ipAddr=''
 export ipMask=''
 export ipGate=''
 export ipDNS='8.8.8.8'
+export IncDisk='default'
 export interface=''
 export Relese=''
 export ddMode='0'
@@ -231,6 +232,13 @@ function getInterface(){
   echo "$interface"
 }
 
+function getDisk(){
+  disks=`lsblk | sed 's/[[:space:]]*$//g' |grep "disk$" |cut -d' ' -f1 |head -n1`
+  [ -n "$disks" ] || echo ""
+  echo "$disks" |grep -q "/dev"
+  [ $? -eq 0 ] && echo "$disks" || echo "/dev/$disks"
+}
+
 [ -n "$Relese" ] || Relese='Debian'
 linux_relese=$(echo "$Relese" |sed 's/\ //g' |sed -r 's/(.*)/\L\1/')
 clear && echo -e "\n\033[36m# Check Dependence\033[0m\n"
@@ -260,13 +268,15 @@ MASK="$ipMask";
 GATE="$ipGate";
 
 if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
-  dependence wget,awk,grep,sed,cut,cat,cpio,gzip,find,dirname,basename;
+  dependence wget,awk,grep,sed,cut,cat,lsblk,cpio,gzip,find,dirname,basename;
 elif [[ "$Relese" == 'CentOS' ]]; then
-  dependence wget,awk,grep,sed,cut,cat,cpio,gzip,find,dirname,basename,file,xz;
+  dependence wget,awk,grep,sed,cut,cat,lsblk,cpio,gzip,find,dirname,basename,file,xz;
 fi
 [ -n "$tmpWORD" ] && dependence openssl
 [[ -n "$tmpWORD" ]] && myPASSWORD="$(openssl passwd -1 "$tmpWORD")";
 [[ -z "$myPASSWORD" ]] && myPASSWORD='$1$4BJZaD0A$y1QykUnJ6mXprENfwpseH0';
+
+tempDisk=`getDisk`; [ -n "$tempDisk" ] && IncDisk="$tempDisk"
 
 if [[ "$loaderMode" == "0" ]]; then
   [[ -f '/boot/grub/grub.cfg' ]] && GRUBVER='0' && GRUBDIR='/boot/grub' && GRUBFILE='grub.cfg';
@@ -639,7 +649,7 @@ d-i pkgsel/upgrade select none
 popularity-contest popularity-contest/participate boolean false
 
 d-i grub-installer/only_debian boolean true
-d-i grub-installer/bootdev string "\$(list-devices disk |head -n1)"
+d-i grub-installer/bootdev string $IncDisk
 d-i grub-installer/force-efi-extra-removable boolean true
 d-i finish-install/reboot_in_progress note
 d-i debian-installer/exit/reboot boolean true
