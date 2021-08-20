@@ -583,7 +583,7 @@ d-i user-setup/encrypt-home boolean false
 
 d-i clock-setup/utc boolean true
 d-i time/zone string US/Eastern
-d-i clock-setup/ntp boolean true
+d-i clock-setup/ntp boolean false
 
 d-i preseed/early_command string anna-install libfuse2-udeb fuse-udeb ntfs-3g-udeb fuse-modules-${vKernel_udeb}-amd64-di
 d-i partman/early_command string [[ -n "\$(blkid -t TYPE='vfat' -o device)" ]] && umount "\$(blkid -t TYPE='vfat' -o device)"; \
@@ -637,18 +637,18 @@ if [[ "$loaderMode" != "0" ]] && [[ "$setNet" == '0' ]]; then
   sed -i '/netcfg\/confirm_static/d' /tmp/boot/preseed.cfg
 fi
 
-[[ "$DIST" == 'trusty' ]] && GRUBPATCH='1'
-[[ "$DIST" == 'wily' ]] && GRUBPATCH='1'
-[[ "$DIST" == 'xenial' ]] && {
-  sed -i 's/^d-i\ clock-setup\/ntp\ boolean\ true/d-i\ clock-setup\/ntp\ boolean\ false/g' /tmp/boot/preseed.cfg
-}
+#[[ "$DIST" == 'trusty' ]] && GRUBPATCH='1'
+#[[ "$DIST" == 'wily' ]] && GRUBPATCH='1'
+#[[ "$DIST" == 'xenial' ]] && {
+#  sed -i 's/^d-i\ clock-setup\/ntp\ boolean\ true/d-i\ clock-setup\/ntp\ boolean\ false/g' /tmp/boot/preseed.cfg
+#}
 
 #[[ "$GRUBPATCH" == '1' ]] && {
 #  sed -i 's/^d-i\ grub-installer\/bootdev\ string\ default//g' /tmp/boot/preseed.cfg
 #}
-[[ "$GRUBPATCH" == '0' ]] && {
-  sed -i 's/debconf-set\ grub-installer\/bootdev.*\"\;//g' /tmp/boot/preseed.cfg
-}
+#[[ "$GRUBPATCH" == '0' ]] && {
+#  sed -i 's/debconf-set\ grub-installer\/bootdev.*\"\;//g' /tmp/boot/preseed.cfg
+#}
 
 [[ "$linux_relese" == 'debian' ]] && {
   sed -i '/user-setup\/allow-password-weak/d' /tmp/boot/preseed.cfg
