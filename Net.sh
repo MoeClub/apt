@@ -246,7 +246,7 @@ linux_relese=$(echo "$Relese" |sed 's/\ //g' |sed -r 's/(.*)/\L\1/')
 clear && echo -e "\n\033[36m# Check Dependence\033[0m\n"
 
 if [[ "$ddMode" == '1' ]]; then
-  CheckDependence iconv;
+  dependence iconv;
   linux_relese='debian';
   tmpDIST='bullseye';
   tmpVER='amd64';
