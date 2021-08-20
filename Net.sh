@@ -391,18 +391,18 @@ if [[ "$SpikCheckDIST" == '0' ]]; then
   }
 fi
 
-if [[ "$ddMode" == '1' ]]; then
-  export SSL_SUPPORT='https://github.com/MoeClub/MoeClub.github.io/raw/master/lib/wget_udeb_amd64.tar.gz';
-  if [[ -n "$tmpURL" ]]; then
-    DDURL="$tmpURL"
-    echo "$DDURL" |grep -q '^http://\|^ftp://\|^https://';
-    [[ $? -ne '0' ]] && echo 'Please input vaild URL,Only support http://, ftp:// and https:// !' && exit 1;
-    [[ -n "$tmpSSL" ]] && SSL_SUPPORT="$tmpSSL";
-  else
-    echo 'Please input vaild image URL! ';
-    exit 1;
-  fi
-fi
+#if [[ "$ddMode" == '1' ]]; then
+#  export SSL_SUPPORT='https://github.com/MoeClub/MoeClub.github.io/raw/master/lib/wget_udeb_amd64.tar.gz';
+#  if [[ -n "$tmpURL" ]]; then
+#    DDURL="$tmpURL"
+#    echo "$DDURL" |grep -q '^http://\|^ftp://\|^https://';
+#    [[ $? -ne '0' ]] && echo 'Please input vaild URL,Only support http://, ftp:// and https:// !' && exit 1;
+#    [[ -n "$tmpSSL" ]] && SSL_SUPPORT="$tmpSSL";
+#  else
+#    echo 'Please input vaild image URL! ';
+#    exit 1;
+#  fi
+#fi
 
 clear && echo -e "\n\033[36m# Install\033[0m\n"
 
@@ -615,7 +615,7 @@ d-i clock-setup/utc boolean true
 d-i time/zone string US/Eastern
 d-i clock-setup/ntp boolean false
 
-d-i preseed/early_command string anna-install libfuse2-udeb fuse-udeb ntfs-3g-udeb fuse-modules-${vKernel_udeb}-amd64-di
+d-i preseed/early_command string anna-install libcrypt1-udeb libfuse2-udeb fuse-udeb ntfs-3g-udeb libcrypto1.1-udeb libpcre2-8-0-udeb libssl1.1-udeb libuuid1-udeb zlib1g-udeb wget-udeb
 d-i partman/early_command string [[ -n "\$(blkid -t TYPE='vfat' -o device)" ]] && umount "\$(blkid -t TYPE='vfat' -o device)"; \
 debconf-set partman-auto/disk "\$(list-devices disk |head -n1)"; \
 wget -qO- '$DDURL' |gunzip -dc |/bin/dd of=\$(list-devices disk |head -n1); \
