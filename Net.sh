@@ -218,6 +218,19 @@ function netmask() {
   echo "$m"
 }
 
+function getInterface(){
+  interface=""
+  Interfaces=`cat /proc/net/dev |grep ':' |cut -d':' -f1 |sed 's/\s//g' |grep -iv '^lo\|^sit\|^stf\|^gif\|^dummy\|^vmnet\|^vir\|^gre\|^ipip\|^ppp\|^bond\|^tun\|^tap\|^ip6gre\|^ip6tnl\|^teql\|^ocserv\|^vpn'`
+  defaultRoute=`ip route show default`
+  for item in "${Interfaces[@]}"
+    do
+      [ -n "$item" ] || continue
+      echo "$defaultRoute" |grep -q "$item"
+      [ $? -eq 0 ] && interface="$item" && break
+    done
+  echo "$interface"
+}
+
 [ -n "$Relese" ] || Relese='Debian'
 linux_relese=$(echo "$Relese" |sed 's/\ //g' |sed -r 's/(.*)/\L\1/')
 clear && echo -e "\n\033[36m# Check Dependence\033[0m\n"
@@ -232,16 +245,15 @@ fi
 [ -n "$ipAddr" ] && [ -n "$ipMask" ] && [ -n "$ipGate" ] && setNet='1';
 if [ "$setNet" == "0" ]; then
   dependence ip
-  interface=`ip route show default |awk '{printf $NF}'`
+  [ -n "$interface" ] || interface=`getInterface`
   iAddr=`ip addr show dev $interface |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
   ipAddr=`echo ${iAddr} |cut -d'/' -f1`
   ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
   ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
-else
-  if [ -z "$interface" ]; then
+fi
+if [ -z "$interface" ]; then
     dependence ip
-    interface=`ip route show default |awk '{printf $NF}'`
-  fi
+    [ -n "$interface" ] || interface=`getInterface`
 fi
 IPv4="$ipAddr";
 MASK="$ipMask";
