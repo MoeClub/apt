@@ -36,12 +36,6 @@ export UNVER='6.4'
 
 while [[ $# -ge 1 ]]; do
   case $1 in
-    -a|--auto)
-      shift
-      ;;
-    -m|--manual)
-      shift
-      ;;
     -v|--ver)
       shift
       tmpVER="$1"
@@ -135,9 +129,12 @@ while [[ $# -ge 1 ]]; do
       sshPORT="$1"
       shift
       ;;
-    --ipv6)
+    --noipv6)
       shift
       setIPv6='1'
+      ;;
+    -a|--auto|-m|--manual)
+      shift
       ;;
     *)
       if [[ "$1" != 'error' ]]; then echo -ne "\nInvaild option: '$1'\n\n"; fi
