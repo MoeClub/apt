@@ -6,21 +6,19 @@
 ## Blog: https://moeclub.org
 ## Written By MoeClub.org
 
-
 export tmpVER=''
 export tmpDIST=''
 export tmpURL=''
 export tmpWORD=''
 export tmpMirror=''
-export tmpSSL=''
 export ipAddr=''
 export ipMask=''
 export ipGate=''
 export ipDNS='8.8.8.8'
 export IncDisk='default'
 export interface=''
-export sshPORT='22'
 export Relese=''
+export sshPORT='22'
 export ddMode='0'
 export setNet='0'
 export setRDP='0'
