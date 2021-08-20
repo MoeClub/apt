@@ -215,7 +215,7 @@ function getInterface(){
   interface=""
   Interfaces=`cat /proc/net/dev |grep ':' |cut -d':' -f1 |sed 's/\s//g' |grep -iv '^lo\|^sit\|^stf\|^gif\|^dummy\|^vmnet\|^vir\|^gre\|^ipip\|^ppp\|^bond\|^tun\|^tap\|^ip6gre\|^ip6tnl\|^teql\|^ocserv\|^vpn'`
   defaultRoute=`ip route show default`
-  for item in "${Interfaces[@]}"
+  for item in `echo "$Interfaces"`
     do
       [ -n "$item" ] || continue
       echo "$defaultRoute" |grep -q "$item"
