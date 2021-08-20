@@ -678,15 +678,15 @@ fi
 #  sed -i 's/debconf-set\ grub-installer\/bootdev.*\"\;//g' /tmp/boot/preseed.cfg
 #}
 
-[[ "$linux_relese" == 'debian' ]] && {
+if [[ "$linux_relese" == 'debian' ]]; then
   sed -i '/user-setup\/allow-password-weak/d' /tmp/boot/preseed.cfg
   sed -i '/user-setup\/encrypt-home/d' /tmp/boot/preseed.cfg
   sed -i '/pkgsel\/update-policy/d' /tmp/boot/preseed.cfg
   sed -i 's/umount\ \/media.*true\;\ //g' /tmp/boot/preseed.cfg
-}
-[[ "$linux_relese" == 'debian' ]] && [[ -f '/tmp/firmware.cpio.gz' ]] && {
-  gzip -d < /tmp/firmware.cpio.gz | cpio --extract --verbose --make-directories --no-absolute-filenames >>/dev/null 2>&1
-}
+  [[ -f '/tmp/firmware.cpio.gz' ]] && gzip -d < /tmp/firmware.cpio.gz | cpio --extract --verbose --make-directories --no-absolute-filenames >>/dev/null 2>&1
+else
+  [[ "$DIST" == 'bionic' ]] && sed -i '/d-i\ grub-installer\/force-efi-extra-removable/d' /tmp/boot/preseed.cfg
+fi
 
 [[ "$ddMode" == '1' ]] && {
 WinNoDHCP(){
