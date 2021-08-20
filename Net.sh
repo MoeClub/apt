@@ -19,6 +19,7 @@ export ipGate=''
 export ipDNS='8.8.8.8'
 export IncDisk='default'
 export interface=''
+export sshPORT='22'
 export Relese=''
 export ddMode='0'
 export setNet='0'
@@ -621,7 +622,6 @@ cd '/mnt/ProgramData/Microsoft/Windows/Start Menu/Programs'; \
 cd Start* || cd start*; \
 cp -f '/net.bat' './net.bat'; \
 /sbin/reboot; \
-#debconf-set grub-installer/bootdev string "\$(list-devices disk |head -n1)"; \
 umount /media || true; \
 
 d-i partman/mount_style select uuid
@@ -653,8 +653,9 @@ d-i grub-installer/force-efi-extra-removable boolean true
 d-i finish-install/reboot_in_progress note
 d-i debian-installer/exit/reboot boolean true
 d-i preseed/late_command string	\
-sed -ri 's/^#?PermitRootLogin.*/PermitRootLogin yes/g' /target/etc/ssh/sshd_config; \
-sed -ri 's/^#?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config;
+sed -i "s/^#\\?Port.*/Port ${sshPORT}/g" /etc/ssh/sshd_config;
+sed -i "s/^#\\?PermitRootLogin.*/PermitRootLogin yes/g" /target/etc/ssh/sshd_config; \
+sed -i "s/^#\\?PasswordAuthentication.*/PasswordAuthentication yes/g" /target/etc/ssh/sshd_config;
 EOF
 
 if [[ "$loaderMode" != "0" ]] && [[ "$setNet" == '0' ]]; then
@@ -663,19 +664,6 @@ if [[ "$loaderMode" != "0" ]] && [[ "$setNet" == '0' ]]; then
   sed -i '/netcfg\/get_.*/d' /tmp/boot/preseed.cfg
   sed -i '/netcfg\/confirm_static/d' /tmp/boot/preseed.cfg
 fi
-
-#[[ "$DIST" == 'trusty' ]] && GRUBPATCH='1'
-#[[ "$DIST" == 'wily' ]] && GRUBPATCH='1'
-#[[ "$DIST" == 'xenial' ]] && {
-#  sed -i 's/^d-i\ clock-setup\/ntp\ boolean\ true/d-i\ clock-setup\/ntp\ boolean\ false/g' /tmp/boot/preseed.cfg
-#}
-
-#[[ "$GRUBPATCH" == '1' ]] && {
-#  sed -i 's/^d-i\ grub-installer\/bootdev\ string\ default//g' /tmp/boot/preseed.cfg
-#}
-#[[ "$GRUBPATCH" == '0' ]] && {
-#  sed -i 's/debconf-set\ grub-installer\/bootdev.*\"\;//g' /tmp/boot/preseed.cfg
-#}
 
 if [[ "$linux_relese" == 'debian' ]]; then
   sed -i '/user-setup\/allow-password-weak/d' /tmp/boot/preseed.cfg
