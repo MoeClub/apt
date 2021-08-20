@@ -639,7 +639,7 @@ d-i pkgsel/upgrade select none
 popularity-contest popularity-contest/participate boolean false
 
 d-i grub-installer/only_debian boolean true
-d-i grub-installer/bootdev string (hd0)
+d-i grub-installer/bootdev string "\$(list-devices disk |head -n1)"
 d-i grub-installer/force-efi-extra-removable boolean true
 d-i finish-install/reboot_in_progress note
 d-i debian-installer/exit/reboot boolean true
