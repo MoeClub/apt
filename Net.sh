@@ -693,17 +693,17 @@ WinRDP(){
   iconv -f 'UTF-8' -t 'GBK' '/tmp/boot/net.tmp' -o '/tmp/boot/net.bat'
   rm -rf '/tmp/boot/net.tmp'
   echo "$DDURL" |grep -q '^https://'
-  [[ $? -eq '0' ]] && {
-    echo -ne '\nAdd ssl support...\n'
-    [[ -n $SSL_SUPPORT ]] && {
-      wget --no-check-certificate -qO- "$SSL_SUPPORT" |tar -x
-      [[ ! -f  /tmp/boot/usr/bin/wget ]] && echo 'Error! SSL_SUPPORT.' && exit 1;
-      sed -i 's/wget\ -qO-/\/usr\/bin\/wget\ --no-check-certificate\ --retry-connrefused\ --tries=7\ --continue\ -qO-/g' /tmp/boot/preseed.cfg
-      [[ $? -eq '0' ]] && echo -ne 'Success! \n\n'
-    } || {
-    echo -ne 'Not ssl support package! \n\n';
-    exit 1;
-    }
+  #[[ $? -eq '0' ]] && {
+  #  echo -ne '\nAdd ssl support...\n'
+  #  [[ -n $SSL_SUPPORT ]] && {
+  #    wget --no-check-certificate -qO- "$SSL_SUPPORT" |tar -x
+  #    [[ ! -f  /tmp/boot/usr/bin/wget ]] && echo 'Error! SSL_SUPPORT.' && exit 1;
+  #    sed -i 's/wget\ -qO-/\/usr\/bin\/wget\ --no-check-certificate\ --retry-connrefused\ --tries=7\ --continue\ -qO-/g' /tmp/boot/preseed.cfg
+  #    [[ $? -eq '0' ]] && echo -ne 'Success! \n\n'
+  #  } || {
+  #  echo -ne 'Not ssl support package! \n\n';
+  #  exit 1;
+  #  }
   }
 }
 
