@@ -343,7 +343,7 @@ if [[ -n "$tmpDIST" ]]; then
       [[ -n $isDigital ]] && {
         [[ "$isDigital" == '12.04' ]] && DIST='precise';
         [[ "$isDigital" == '14.04' ]] && DIST='trusty';
-        [[ "$isDigital" == '16.04' ]] && DIST='xenial';
+        #[[ "$isDigital" == '16.04' ]] && DIST='xenial';
         [[ "$isDigital" == '18.04' ]] && DIST='bionic';
         [[ "$isDigital" == '20.04' ]] && DIST='focal';
       }
