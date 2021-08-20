@@ -16,6 +16,8 @@ export tmpSSL=''
 export ipAddr=''
 export ipMask=''
 export ipGate=''
+export ipDNS='8.8.8.8'
+export interface=''
 export Relese=''
 export ddMode='0'
 export setNet='0'
@@ -90,6 +92,11 @@ while [[ $# -ge 1 ]]; do
     --ip-gate)
       shift
       ipGate="$1"
+      shift
+      ;;
+    --ip-dns)
+      shift
+      ipDNS="$1"
       shift
       ;;
     --dev-net)
@@ -225,13 +232,13 @@ fi
 [ -n "$ipAddr" ] && [ -n "$ipMask" ] && [ -n "$ipGate" ] && setNet='1';
 if [ "$setNet" == "0" ]; then
   dependence ip
-  iNet=`ip route show default |awk '{printf $NF}'`
-  iAddr=`ip addr show dev $iNet |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
+  interface=`ip route show default |awk '{printf $NF}'`
+  iAddr=`ip addr show dev $interface |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
   ipAddr=`echo ${iAddr} |cut -d'/' -f1`
   ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
   ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'`
 else
-  if [ -n "$interface" ]; then
+  if [ -z "$interface" ]; then
     dependence ip
     interface=`ip route show default |awk '{printf $NF}'`
   fi
@@ -239,7 +246,6 @@ fi
 IPv4="$ipAddr";
 MASK="$ipMask";
 GATE="$ipGate";
-
 
 if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
   dependence wget,awk,grep,sed,cut,cat,cpio,gzip,find,dirname,basename;
@@ -555,7 +561,7 @@ d-i console-setup/layoutcode string us
 
 d-i keyboard-configuration/xkb-keymap string us
 
-d-i netcfg/choose_interface select $IFETH
+d-i netcfg/choose_interface select $interface
 
 d-i netcfg/disable_autoconfig boolean true
 d-i netcfg/dhcp_failed note
@@ -563,7 +569,7 @@ d-i netcfg/dhcp_options select Configure network manually
 d-i netcfg/get_ipaddress string $IPv4
 d-i netcfg/get_netmask string $MASK
 d-i netcfg/get_gateway string $GATE
-d-i netcfg/get_nameservers string 8.8.8.8
+d-i netcfg/get_nameservers string $ipDNS
 d-i netcfg/no_default_route boolean true
 d-i netcfg/confirm_static boolean true
 
