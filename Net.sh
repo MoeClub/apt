@@ -185,7 +185,8 @@ function selectMirror(){
   New=$(echo "$4" |sed 's/\ //g')
   [ -n "$Relese" ] && [ -n "$DIST" ] && [ -n "$VER" ] || exit 1
   if [ "$Relese" == "debian" ] || [ "$Relese" == "ubuntu" ]; then
-    TEMP="SUB_MIRROR/dists/${DIST}/main/installer-${VER}/current/images/netboot/${Relese}-installer/${VER}/initrd.gz"
+    [ "$DIST" == "focal" ] && legacy="legacy-" || legacy=""
+    TEMP="SUB_MIRROR/dists/${DIST}/main/installer-${VER}/current/${legacy}images/netboot/${Relese}-installer/${VER}/initrd.gz"
   elif [ "$Relese" == "centos" ]; then
     TEMP="SUB_MIRROR/${DIST}/os/${VER}/isolinux/initrd.img"
   fi
@@ -426,9 +427,10 @@ fi
 echo -e "\n[\033[33m$Relese\033[0m] [\033[33m$DIST\033[0m] [\033[33m$VER\033[0m] Downloading..."
 
 if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
-  wget --no-check-certificate -qO '/tmp/initrd.img' "${LinuxMirror}/dists/${DIST}/main/installer-${VER}/current/images/netboot/${linux_relese}-installer/${VER}/initrd.gz"
+  [ "$DIST" == "focal" ] && legacy="legacy-" || legacy=""
+  wget --no-check-certificate -qO '/tmp/initrd.img' "${LinuxMirror}/dists/${DIST}/main/installer-${VER}/current/${legacy}images/netboot/${linux_relese}-installer/${VER}/initrd.gz"
   [[ $? -ne '0' ]] && echo -ne "\033[31mError! \033[0mDownload 'initrd.img' for \033[33m$linux_relese\033[0m failed! \n" && exit 1
-  wget --no-check-certificate -qO '/tmp/vmlinuz' "${LinuxMirror}/dists/${DIST}${inUpdate}/main/installer-${VER}/current/images/netboot/${linux_relese}-installer/${VER}/linux"
+  wget --no-check-certificate -qO '/tmp/vmlinuz' "${LinuxMirror}/dists/${DIST}${inUpdate}/main/installer-${VER}/current/${legacy}images/netboot/${linux_relese}-installer/${VER}/linux"
   [[ $? -ne '0' ]] && echo -ne "\033[31mError! \033[0mDownload 'vmlinuz' for \033[33m$linux_relese\033[0m failed! \n" && exit 1
   MirrorHost="$(echo "$LinuxMirror" |awk -F'://|/' '{print $2}')";
   MirrorFolder="$(echo "$LinuxMirror" |awk -F''${MirrorHost}'' '{print $2}')";
