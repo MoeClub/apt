@@ -17,6 +17,7 @@ export ipGate=''
 export ipDNS='8.8.8.8'
 export IncDisk='default'
 export interface=''
+export interfaceSelect='auto'
 export Relese=''
 export sshPORT='22'
 export ddMode='0'
@@ -70,7 +71,7 @@ while [[ $# -ge 1 ]]; do
       ;;
     -i|--interface)
       shift
-      interface="$1"
+      interfaceSelect="$1"
       shift
       ;;
     --ip-addr)
@@ -507,7 +508,7 @@ if [[ "$loaderMode" == "0" ]]; then
   LinuxIMG="$(grep 'initrd.*/' /tmp/grub.new |awk '{print $1}' |tail -n 1)";
   [ -z "$LinuxIMG" ] && sed -i "/$LinuxKernel.*\//a\\\tinitrd\ \/" /tmp/grub.new && LinuxIMG='initrd';
 
-  echo "$interface" |grep -q "^eth" && setInterfaceName=1
+  #echo "$interface" |grep -q "^eth" && setInterfaceName=1
   [[ "$setInterfaceName" == "1" ]] && Add_OPTION="net.ifnames=0 biosdevname=0" || Add_OPTION=""
   [[ "$setIPv6" == "1" ]] && Add_OPTION="$Add_OPTION ipv6.disable=1"
 
@@ -572,13 +573,13 @@ d-i console-setup/layoutcode string us
 
 d-i keyboard-configuration/xkb-keymap string us
 
-d-i netcfg/choose_interface select $interface
+d-i netcfg/choose_interface select $interfaceSelect
 
 d-i netcfg/disable_autoconfig boolean true
 d-i netcfg/dhcp_failed note
 d-i netcfg/dhcp_options select Configure network manually
-d-i netcfg/get_hostname string $linux_relese
-d-i netcfg/get_domain string $linux_relese
+#d-i netcfg/get_hostname string $linux_relese
+#d-i netcfg/get_domain string $linux_relese
 d-i netcfg/get_ipaddress string $IPv4
 d-i netcfg/get_netmask string $MASK
 d-i netcfg/get_gateway string $GATE
