@@ -193,3 +193,9 @@ DEBIAN_FRONTEND=noninteractive apt install -y nvidia-driver nvidia-cuda-toolkit 
 # apt install -y "linux-headers-`uname -r`"
 # sudo dkms install -m `ls -1 /usr/src |grep "^nvidia" |sed 's/^nvidia-/nvidia\//'`
 ```
+
+# ssh config
+```
+echo -ne "# chmod 600 ~/.ssh/id_rsa\n\nHost *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n  IdentityFile ~/.ssh/id_rsa\n" > ~/.ssh/config
+
+```
