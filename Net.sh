@@ -635,7 +635,7 @@ d-i partman-auto/method string regular
 #d-i partman-auto/init_automatically_partition select Guided - use entire disk
 #d-i partman-auto/choose_recipe select All files in one partition (recommended for new users)
 #d-i partman-auto/choose_recipe select atomic
-d-i partman-auto/choose_recipe select /lib/partman/recipes-arm64-efi/30atomic 
+d-i partman-auto/expert_recipe_file string /lib/partman/recipes-arm64-efi/30atomic 
 d-i partman-md/device_remove_md boolean true
 d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-lvm/confirm boolean true
