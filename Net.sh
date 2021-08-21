@@ -17,7 +17,7 @@ export ipGate=''
 export ipDNS='8.8.8.8'
 export IncDisk='default'
 export interface=''
-export interfaceSelect='auto'
+export interfaceSelect=''
 export Relese=''
 export sshPORT='22'
 export ddMode='0'
@@ -397,6 +397,13 @@ clear && echo -e "\n\033[36m# Install\033[0m\n"
 
 [[ "$ddMode" == '1' ]] && echo -ne "\033[34mAuto Mode\033[0m insatll \033[33mWindows\033[0m\n[\033[33m$DDURL\033[0m]\n"
 
+if [ -z "$interfaceSelect" ]; then
+  if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
+    interfaceSelect="auto"
+  elif [[ "$linux_relese" == 'centos' ]]; then
+    interfaceSelect="link"
+  fi
+fi
 
 if [[ "$linux_relese" == 'centos' ]]; then
   if [[ "$DIST" != "$UNVER" ]]; then
@@ -508,14 +515,13 @@ if [[ "$loaderMode" == "0" ]]; then
   LinuxIMG="$(grep 'initrd.*/' /tmp/grub.new |awk '{print $1}' |tail -n 1)";
   [ -z "$LinuxIMG" ] && sed -i "/$LinuxKernel.*\//a\\\tinitrd\ \/" /tmp/grub.new && LinuxIMG='initrd';
 
-  #echo "$interface" |grep -q "^eth" && setInterfaceName=1
   [[ "$setInterfaceName" == "1" ]] && Add_OPTION="net.ifnames=0 biosdevname=0" || Add_OPTION=""
   [[ "$setIPv6" == "1" ]] && Add_OPTION="$Add_OPTION ipv6.disable=1"
 
   if [[ "$linux_relese" == 'debian' ]] || [[ "$linux_relese" == 'ubuntu' ]]; then
     BOOT_OPTION="auto=true $Add_OPTION hostname=$linux_relese domain= -- quiet"
   elif [[ "$linux_relese" == 'centos' ]]; then
-    BOOT_OPTION="ks=file://ks.cfg $Add_OPTION ksdevice=$interface"
+    BOOT_OPTION="ks=file://ks.cfg $Add_OPTION ksdevice=$interfaceSelect"
   fi
 
   [[ "$Type" == 'InBoot' ]] && {
