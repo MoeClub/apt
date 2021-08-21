@@ -419,11 +419,6 @@ if [[ "$linux_relese" == 'centos' ]]; then
     if [ $? != '0' ]; then
       UNKNOWHW='1';
       echo -en "\033[33mThe version lower then \033[31m$UNVER\033[33m may not support in auto mode! \033[0m\n";
-      if [[ "$inVNC" == 'n' ]]; then
-        echo -en "\033[35mYou can connect VNC with \033[32mPublic IP\033[35m and port \033[32m1\033[35m/\033[32m5901\033[35m in vnc viewer.\033[0m\n"
-        read -n 1 -p "Press Enter to continue..." INP
-        [[ "$INP" != '' ]] && echo -ne '\b \n\n';
-      fi
     fi
     awk 'BEGIN{print '${UNVER}'-'${DIST}'+0.59}' |grep -q '^-'
     if [ $? == '0' ]; then
