@@ -627,11 +627,7 @@ cp -f '/net.bat' './net.bat'; \
 /sbin/reboot; \
 umount /media || true; \
 
-#d-i partman/choose_label string gpt
-#d-i partman/default_label string gpt
-#d-i partman-basicfilesystems/choose_label string gpt
-#d-i partman-basicfilesystems/default_label string gpt
-d-i partman-efi/non_efi_system boolean true
+#d-i partman-efi/non_efi_system boolean true
 d-i partman-partitioning/choose_label string gpt
 d-i partman-partitioning/default_label string gpt
 d-i partman-partitioning/confirm_write_new_label boolean true
