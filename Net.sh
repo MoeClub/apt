@@ -300,7 +300,15 @@ if [[ -n "$tmpVER" ]]; then
     fi
   fi
 fi
-[ -z "$VER" ] && VER='amd64'
+
+if [ -z "$VER" ]; then
+  if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
+    VER=`dpkg --print-architecture`;
+    [ -n "$VER" ] || VER='amd64';
+  elif [[ "$Relese" == 'CentOS' ]]; then
+    VER='x86_64';
+  fi
+fi
 
 if [[ -z "$tmpDIST" ]]; then
   [ "$Relese" == 'Debian' ] && tmpDIST='buster';
