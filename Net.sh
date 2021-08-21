@@ -630,8 +630,12 @@ d-i partman-auto/method string regular
 d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-md/device_remove_md boolean true
 d-i partman-auto/choose_recipe select atomic
-#d-i partman-partitioning/default_label string gpt
+#d-i partman-basicfilesystems/choose_label string gpt
+#d-i partman-basicfilesystems/default_label string gpt
 #d-i partman-partitioning/choose_label string gpt
+#d-i partman-partitioning/default_label string gpt
+#d-i partman/choose_label string gpt
+#d-i partman/default_label string gpt
 d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
 d-i partman-lvm/confirm boolean true
