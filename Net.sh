@@ -623,21 +623,23 @@ cp -f '/net.bat' './net.bat'; \
 /sbin/reboot; \
 umount /media || true; \
 
-d-i partman/choose_label string gpt
-d-i partman/default_label string gpt
+#d-i partman/choose_label string gpt
+#d-i partman/default_label string gpt
+#d-i partman-basicfilesystems/choose_label string gpt
+#d-i partman-basicfilesystems/default_label string gpt
 d-i partman-partitioning/choose_label string gpt
 d-i partman-partitioning/default_label string gpt
-d-i partman-basicfilesystems/choose_label string gpt
-d-i partman-basicfilesystems/default_label string gpt
+d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/mount_style select uuid
+d-i partman/choose_partition select finish
+d-i partman-auto/method string regular
 d-i partman-auto/init_automatically_partition select Guided - use entire disk
 d-i partman-auto/choose_recipe select All files in one partition (recommended for new users)
-d-i partman-auto/method string regular
-d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-auto/choose_recipe select /lib/partman/recipes-arm64-efi/30atomic
+#d-i partman-auto/choose_recipe select atomic
+#d-i partman-efi/non_efi_system boolean false
 d-i partman-md/device_remove_md boolean true
-d-i partman-auto/choose_recipe select atomic
-d-i partman-partitioning/confirm_write_new_label boolean true
-d-i partman/choose_partition select finish
+d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-lvm/confirm boolean true
 d-i partman-lvm/confirm_nooverwrite boolean true
 d-i partman/confirm boolean true
