@@ -215,7 +215,7 @@ function netmask() {
 function getInterface(){
   interface=""
   Interfaces=`cat /proc/net/dev |grep ':' |cut -d':' -f1 |sed 's/\s//g' |grep -iv '^lo\|^sit\|^stf\|^gif\|^dummy\|^vmnet\|^vir\|^gre\|^ipip\|^ppp\|^bond\|^tun\|^tap\|^ip6gre\|^ip6tnl\|^teql\|^ocserv\|^vpn'`
-  defaultRoute=`ip route show default`
+  defaultRoute=`ip route show default |grep "^default"`
   for item in `echo "$Interfaces"`
     do
       [ -n "$item" ] || continue
@@ -250,7 +250,7 @@ if [ "$setNet" == "0" ]; then
   iAddr=`ip addr show dev $interface |grep "inet.*" |head -n1 |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,2\}'`
   ipAddr=`echo ${iAddr} |cut -d'/' -f1`
   ipMask=`netmask $(echo ${iAddr} |cut -d'/' -f2)`
-  ipGate=`ip route show default |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' |head -n1`
+  ipGate=`ip route show default |grep "^default" |grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' |head -n1`
 fi
 if [ -z "$interface" ]; then
     dependence ip
