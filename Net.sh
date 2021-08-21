@@ -618,8 +618,6 @@ d-i clock-setup/ntp boolean false
 
 d-i preseed/early_command string anna-install libfuse2-udeb fuse-udeb ntfs-3g-udeb libcrypto1.1-udeb libpcre2-8-0-udeb libssl1.1-udeb libuuid1-udeb zlib1g-udeb wget-udeb
 d-i partman/early_command string [[ -n "\$(blkid -t TYPE='vfat' -o device)" ]] && umount "\$(blkid -t TYPE='vfat' -o device)"; \
-[[ -d /sys/firmware/efi ]] && debconf-set partman-efi/non_efi_system true && debconf-set partman-partitioning/choose_label gpt && debconf-set partman-partitioning/default_label gpt; \
-[[ -d /sys/firmware/efi ]] && debconf-set partman-auto/expert_recipe_file "\$(find /lib/partman -type f -name '*atomic' 2>/dev/null |grep 'atomic' |grep 'efi' |head -n1)" || debconf-set partman-auto/expert_recipe_file "\$(find /lib/partman -type f -name '*atomic' 2>/dev/null |grep 'atomic' |grep -v 'efi' |head -n1)"; \
 debconf-set partman-auto/disk "\$(list-devices disk |head -n1)"; \
 wget -qO- '$DDURL' |gunzip -dc |/bin/dd of=\$(list-devices disk |head -n1); \
 mount.ntfs-3g \$(list-devices partition |head -n1) /mnt; \
@@ -633,8 +631,8 @@ d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/mount_style select uuid
 #d-i partman/choose_partition select finish
 d-i partman-auto/method string regular
-#d-i partman-auto/init_automatically_partition select Guided - use entire disk
-#d-i partman-auto/choose_recipe select All files in one partition (recommended for new users)
+d-i partman-auto/init_automatically_partition select Guided - use entire disk
+d-i partman-auto/choose_recipe select All files in one partition (recommended for new users)
 #d-i partman-auto/choose_recipe select atomic
 #d-i partman-auto/expert_recipe_file string /lib/partman/recipes-arm64-efi/30atomic 
 d-i partman-md/device_remove_md boolean true
