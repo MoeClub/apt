@@ -232,6 +232,10 @@ function getDisk(){
   [ $? -eq 0 ] && echo "$disks" || echo "/dev/$disks"
 }
 
+function diskType(){
+  echo `udevadm info --query all "$1" 2>/dev/null |grep 'ID_PART_TABLE_TYPE' |cut -d'=' -f2`
+}
+
 [ -n "$Relese" ] || Relese='Debian'
 linux_relese=$(echo "$Relese" |sed 's/\ //g' |sed -r 's/(.*)/\L\1/')
 clear && echo -e "\n\033[36m# Check Dependence\033[0m\n"
