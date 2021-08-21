@@ -627,7 +627,7 @@ cp -f '/net.bat' './net.bat'; \
 /sbin/reboot; \
 umount /media || true; \
 
-#d-i partman-efi/non_efi_system boolean true
+d-i partman-efi/non_efi_system boolean true
 d-i partman-partitioning/choose_label string gpt
 d-i partman-partitioning/default_label string gpt
 d-i partman-partitioning/confirm_write_new_label boolean true
@@ -657,7 +657,7 @@ d-i grub-installer/only_debian boolean true
 d-i grub-installer/bootdev string $IncDisk
 d-i grub-installer/force-efi-extra-removable boolean true
 d-i finish-install/reboot_in_progress note
-d-i debian-installer/exit/reboot boolean true
+#d-i debian-installer/exit/reboot boolean true
 d-i preseed/late_command string	\
 echo '${linux_relese}' >/target/etc/hostname; \
 sed -ri 's/^#?Port.*/Port ${sshPORT}/g' /target/etc/ssh/sshd_config; \
