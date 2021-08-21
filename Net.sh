@@ -619,6 +619,7 @@ d-i clock-setup/ntp boolean false
 d-i preseed/early_command string anna-install libfuse2-udeb fuse-udeb ntfs-3g-udeb libcrypto1.1-udeb libpcre2-8-0-udeb libssl1.1-udeb libuuid1-udeb zlib1g-udeb wget-udeb
 d-i partman/early_command string [[ -n "\$(blkid -t TYPE='vfat' -o device)" ]] && umount "\$(blkid -t TYPE='vfat' -o device)"; \
 [[ -d /sys/firmware/efi ]] && debconf-set partman-efi/non_efi_system true && debconf-set partman-partitioning/choose_label gpt && debconf-set partman-partitioning/default_label gpt; \
+[[ -d /sys/firmware/efi ]] && debconf-set partman-auto/expert_recipe_file "\$(find /lib/partman -type f -name '*atomic' 2>/dev/null |grep 'atomic' |grep 'efi' |head -n1)" || debconf-set partman-auto/expert_recipe_file "\$(find /lib/partman -type f -name '*atomic' 2>/dev/null |grep 'atomic' |grep -v 'efi' |head -n1)"; \
 debconf-set partman-auto/disk "\$(list-devices disk |head -n1)"; \
 wget -qO- '$DDURL' |gunzip -dc |/bin/dd of=\$(list-devices disk |head -n1); \
 mount.ntfs-3g \$(list-devices partition |head -n1) /mnt; \
@@ -635,7 +636,7 @@ d-i partman-auto/method string regular
 #d-i partman-auto/init_automatically_partition select Guided - use entire disk
 #d-i partman-auto/choose_recipe select All files in one partition (recommended for new users)
 #d-i partman-auto/choose_recipe select atomic
-d-i partman-auto/expert_recipe_file string /lib/partman/recipes-arm64-efi/30atomic 
+#d-i partman-auto/expert_recipe_file string /lib/partman/recipes-arm64-efi/30atomic 
 d-i partman-md/device_remove_md boolean true
 d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-lvm/confirm boolean true
@@ -681,6 +682,7 @@ else
   sed -i '/d-i\ grub-installer\/force-efi-extra-removable/d' /tmp/boot/preseed.cfg
 fi
 
+rm -rf /tmp/boot/preseed.cfg
 [[ "$ddMode" == '1' ]] && {
 WinNoDHCP(){
   echo -ne "for\0040\0057f\0040\0042tokens\00753\0052\0042\0040\0045\0045i\0040in\0040\0050\0047netsh\0040interface\0040show\0040interface\0040\0136\0174more\0040\00533\0040\0136\0174findstr\0040\0057I\0040\0057R\0040\0042本地\0056\0052\0040以太\0056\0052\0040Local\0056\0052\0040Ethernet\0042\0047\0051\0040do\0040\0050set\0040EthName\0075\0045\0045j\0051\r\nnetsh\0040\0055c\0040interface\0040ip\0040set\0040address\0040name\0075\0042\0045EthName\0045\0042\0040source\0075static\0040address\0075$IPv4\0040mask\0075$MASK\0040gateway\0075$GATE\r\nnetsh\0040\0055c\0040interface\0040ip\0040add\0040dnsservers\0040name\0075\0042\0045EthName\0045\0042\0040address\00758\00568\00568\00568\0040index\00751\0040validate\0075no\r\n\r\n" >>'/tmp/boot/net.tmp';
