@@ -643,12 +643,12 @@ umount /media || true; \
 
 d-i debian-installer/allow_unauthenticated boolean true
 
-tasksel tasksel/first multiselect minimal
-d-i pkgsel/update-policy select none
-d-i pkgsel/include string openssh-server
-d-i pkgsel/upgrade select none
+#tasksel tasksel/first multiselect minimal
+#d-i pkgsel/update-policy select none
+#d-i pkgsel/include string openssh-server
+#d-i pkgsel/upgrade select none
 
-popularity-contest popularity-contest/participate boolean false
+#popularity-contest popularity-contest/participate boolean false
 
 #d-i grub-installer/only_debian boolean true
 #d-i grub-installer/bootdev string $IncDisk
