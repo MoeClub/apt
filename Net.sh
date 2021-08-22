@@ -255,7 +255,7 @@ function getGrub(){
 
 if [[ "$loaderMode" == "0" ]]; then
   Grub=`getGrub "/boot"`
-  [ -z "$Grub" ] && echo -ne "Error! \nNot Found grub.\n" && exit 1;
+  [ -z "$Grub" ] && echo -ne "Error! Not Found grub.\n" && exit 1;
   GRUBDIR=`echo "$Grub" |cut -d':' -f0`
   GRUBFILE=`echo "$Grub" |cut -d':' -f1`
   GRUBVER=`echo "$Grub" |cut -d':' -f2`
@@ -482,11 +482,11 @@ if [[ "$linux_relese" == 'debian' ]]; then
 fi
 
 if [[ "$loaderMode" == "0" ]]; then
-  [[ ! -f $GRUBDIR/$GRUBFILE ]] && echo "Error! Not Found $GRUBFILE. " && exit 1;
+  [[ ! -f "${GRUBDIR}/${GRUBFILE}" ]] && echo "Error! Not Found ${GRUBFILE}. " && exit 1;
 
-  [[ ! -f $GRUBDIR/$GRUBFILE.old ]] && [[ -f $GRUBDIR/$GRUBFILE.bak ]] && mv -f $GRUBDIR/$GRUBFILE.bak $GRUBDIR/$GRUBFILE.old;
-  mv -f $GRUBDIR/$GRUBFILE $GRUBDIR/$GRUBFILE.bak;
-  [[ -f $GRUBDIR/$GRUBFILE.old ]] && cat $GRUBDIR/$GRUBFILE.old >$GRUBDIR/$GRUBFILE || cat $GRUBDIR/$GRUBFILE.bak >$GRUBDIR/$GRUBFILE;
+  [[ ! -f "${GRUBDIR}/${GRUBFILE}.old" ]] && [[ -f "${GRUBDIR}/${GRUBFILE}.bak" ]] && mv -f "${GRUBDIR}/${GRUBFILE}.bak" "${GRUBDIR}/${GRUBFILE}.old";
+  mv -f "${GRUBDIR}/${GRUBFILE}" "${GRUBDIR}/${GRUBFILE}.bak";
+  [[ -f "${GRUBDIR}/${GRUBFILE}.old" ]] && cat "${GRUBDIR}/${GRUBFILE}.old" >"${GRUBDIR}/${GRUBFILE}" || cat "${GRUBDIR}/${GRUBFILE}.bak" >"${GRUBDIR}/${GRUBFILE}";
 else
   GRUBVER='-1'
 fi
