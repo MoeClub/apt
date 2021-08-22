@@ -240,7 +240,7 @@ function getGrub(){
   Boot="${1:-/boot}"
   folder=`find "$Boot" -type d -name "grub*" 2>/dev/null |head -n1`
   [ -n "$folder" ] || return
-  fileName=`ls -1 "$folder" 2>/dev/null |grep "grub.conf\|grub.cfg"`
+  fileName=`ls -1 "$folder" 2>/dev/null |grep '^grub.conf$\|^grub.cfg$'`
   [ -n "$fileName" ] || return
   [ "$fileName" == "grub.cfg" ] && ver="0" || ver="1"
   echo "${folder}:${fileName}:${ver}"
