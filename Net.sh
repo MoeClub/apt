@@ -598,7 +598,7 @@ d-i netcfg/get_nameservers string $ipDNS
 d-i netcfg/no_default_route boolean true
 d-i netcfg/confirm_static boolean true
 
-#d-i hw-detect/load_firmware boolean true
+d-i hw-detect/load_firmware boolean true
 
 d-i mirror/country string manual
 d-i mirror/http/hostname string $MirrorHost
