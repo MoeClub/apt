@@ -604,7 +604,7 @@ d-i mirror/country string manual
 d-i mirror/http/hostname string $MirrorHost
 d-i mirror/http/directory string $MirrorFolder
 d-i mirror/http/proxy string
-#d-i apt-setup/services-select multiselect
+d-i apt-setup/services-select multiselect none
 
 d-i passwd/root-login boolean ture
 d-i passwd/make-user boolean false
