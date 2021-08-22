@@ -256,9 +256,9 @@ function getGrub(){
 if [[ "$loaderMode" == "0" ]]; then
   Grub=`getGrub "/boot"`
   [ -z "$Grub" ] && echo -ne "Error! Not Found grub.\n" && exit 1;
-  GRUBDIR=`echo "$Grub" |cut -d':' -f0`
-  GRUBFILE=`echo "$Grub" |cut -d':' -f1`
-  GRUBVER=`echo "$Grub" |cut -d':' -f2`
+  GRUBDIR=`echo "$Grub" |cut -d':' -f1`
+  GRUBFILE=`echo "$Grub" |cut -d':' -f2`
+  GRUBVER=`echo "$Grub" |cut -d':' -f3`
 fi
 
 [ -n "$Relese" ] || Relese='Debian'
