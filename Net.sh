@@ -604,7 +604,6 @@ d-i mirror/country string manual
 d-i mirror/http/hostname string $MirrorHost
 d-i mirror/http/directory string $MirrorFolder
 d-i mirror/http/proxy string
-d-i apt-setup/services-select multiselect none
 
 d-i passwd/root-login boolean ture
 d-i passwd/make-user boolean false
@@ -745,14 +744,12 @@ fi
 find . | cpio -H newc --create --verbose | gzip -9 > /tmp/initrd.img;
 cp -f /tmp/initrd.img /boot/initrd.img || sudo cp -f /tmp/initrd.img /boot/initrd.img
 cp -f /tmp/vmlinuz /boot/vmlinuz || sudo cp -f /tmp/vmlinuz /boot/vmlinuz
-# rm -rf /tmp/boot;
 
 chown root:root $GRUBDIR/$GRUBFILE
 chmod 444 $GRUBDIR/$GRUBFILE
 
 if [[ "$loaderMode" == "0" ]]; then
-  # sleep 3 && reboot || sudo reboot >/dev/null 2>&1
-  sleep 3
+  sleep 3 && reboot || sudo reboot >/dev/null 2>&1
 else
   rm -rf "$HOME/loader"
   mkdir -p "$HOME/loader"
