@@ -481,7 +481,7 @@ if [[ "$loaderMode" == "0" ]]; then
   mv -f $GRUBDIR/$GRUBFILE $GRUBDIR/$GRUBFILE.bak;
   [[ -f $GRUBDIR/$GRUBFILE.old ]] && cat $GRUBDIR/$GRUBFILE.old >$GRUBDIR/$GRUBFILE || cat $GRUBDIR/$GRUBFILE.bak >$GRUBDIR/$GRUBFILE;
 else
-  GRUBVER='2'
+  GRUBVER='-1'
 fi
 
 [[ "$GRUBVER" == '0' ]] && {
