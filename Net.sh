@@ -241,6 +241,13 @@ function getGrub(){
   folder=`find "$Boot" -type d -name "grub*" 2>/dev/null |head -n1`
   [ -n "$folder" ] || return
   fileName=`ls -1 "$folder" 2>/dev/null |grep '^grub.conf$\|^grub.cfg$'`
+  if [ -z "$fileName" ]; then
+    ls -1 "$folder" 2>/dev/null |grep -q '^grubenv$'
+    [ $? -eq 0 ] || return
+    grubEnv=`readlink -f "${folder}/grubenv"`
+    folder=`dirname "$grubEnv"`
+    fileName=`ls -1 "$folder" 2>/dev/null |grep '^grub.conf$\|^grub.cfg$'`
+  fi
   [ -n "$fileName" ] || return
   [ "$fileName" == "grub.cfg" ] && ver="0" || ver="1"
   echo "${folder}:${fileName}:${ver}"
