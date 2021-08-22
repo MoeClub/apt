@@ -325,7 +325,7 @@ fi
 
 if [ -z "$VER" ]; then
   if [[ "$Relese" == 'Debian' ]] || [[ "$Relese" == 'Ubuntu' ]]; then
-    VER=`dpkg --print-architecture`;
+    VER=`dpkg --print-architecture 2>/dev/null`;
     [ -n "$VER" ] || VER='amd64';
   elif [[ "$Relese" == 'CentOS' ]]; then
     VER='x86_64';
