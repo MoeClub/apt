@@ -26,7 +26,13 @@ wget --no-check-certificate -qO- 'https://moeclub.org/attachment/LinuxShell/ngin
 
 # ReInstall
 ```
-bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/InstallNET.sh') -d 9 -v 64 -a
+bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/InstallNET.sh') -d 10 -v 64 -a
+```
+
+# Linux Init
+```
+bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/LinuxInit.sh')
+
 ```
 
 # Install Win8.1
