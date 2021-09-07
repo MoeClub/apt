@@ -3,8 +3,8 @@
 REBOOT="${2:-1}"
 ver=$(uname -r |cut -d"-" -f1 |cut -d"." -f1-2)
 arch=$(dpkg --print-architecture)
-[ "$ver" != "4.19" -o "$ver" != "5.10" ] || exit 1
-[ "$arch" != "amd64" ] || exit 1
+[ "$ver" == "4.19" -o "$ver" == "5.10" ] || exit 1
+[ "$arch" == "amd64" ] || exit 1
 
 echo 'Download: tcp_bbr.ko'
 wget --no-check-certificate -qO "tcp_bbr.ko" "https://raw.githubusercontent.com/MoeClub/apt/master/bbr/ko/${ver}/${arch}/tcp_bbr.ko"
