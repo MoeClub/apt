@@ -205,3 +205,9 @@ DEBIAN_FRONTEND=noninteractive apt install -y nvidia-driver nvidia-cuda-toolkit 
 echo -ne "# chmod 600 ~/.ssh/id_rsa\n\nHost *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n  IdentityFile ~/.ssh/id_rsa\n" > ~/.ssh/config
 
 ```
+
+# OneDrive
+```
+https://[tenancy]-my.sharepoint.com/personal/[user]_[tenancy]_onmicrosoft_com/_layouts/[\d\d]/download.aspx?share=[FileID]
+
+```
