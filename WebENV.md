@@ -208,6 +208,6 @@ echo -ne "# chmod 600 ~/.ssh/id_rsa\n\nHost *\n  StrictHostKeyChecking no\n  Use
 
 # OneDrive
 ```
-https://[tenancy]-my.sharepoint.com/personal/[user]_[tenancy]_onmicrosoft_com/_layouts/[\d\d]/download.aspx?share=[FileID]
+https://[tenancy]-my.sharepoint.com/personal/[user]_[tenancy]_onmicrosoft_com/_layouts/00/download.aspx?share=[FileID]
 
 ```
