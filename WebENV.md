@@ -211,3 +211,9 @@ echo -ne "# chmod 600 ~/.ssh/id_rsa\n\nHost *\n  StrictHostKeyChecking no\n  Use
 https://[tenancy]-my.sharepoint.com/personal/[user]_[tenancy]_onmicrosoft_com/_layouts/15/download.aspx?share=[FileID]
 
 ```
+
+# Login Root
+```
+PASSWORD='MoeClub.org'; echo $PASSWORD |sudo -S true; echo root:$PASSWORD |sudo chpasswd root; sudo apt update; sudo apt install -y openssh-server; sudo apt install -y sshpass; sudo sed -i 's/^.*PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config; sudo sed -i 's/^.*PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl enable sshd; sudo systemctl restart sshd; sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no root@localhost
+
+```
