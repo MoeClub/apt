@@ -206,6 +206,15 @@ echo -ne "# chmod 600 ~/.ssh/id_rsa\n\nHost *\n  StrictHostKeyChecking no\n  Use
 
 ```
 
+# ssh keygen
+```
+ssh-keygen -t rsa -P "" -f ./id_rsa
+
+cat id_rsa.pub
+cat id_rsa
+
+```
+
 # OneDrive
 ```
 https://[tenancy]-my.sharepoint.com/personal/[user]_[tenancy]_onmicrosoft_com/_layouts/15/download.aspx?share=[FileID]
