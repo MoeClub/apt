@@ -233,7 +233,7 @@ PASSWORD='MoeClub.org'; echo $PASSWORD |sudo -S true; echo root:$PASSWORD |sudo 
 CREATE USER 'MoeClub'@'%' IDENTIFIED BY 'MoeClub.ORG';
 
 # 为用户(MoeClub)赋权访问数据库(DataBase)
-GRANT privileges ON DataBase.* TO 'MoeClub'@'%';
+GRANT ALL ON DataBase.* TO 'MoeClub'@'%';
 
 # 刷新权限
 FLUSH privileges;
