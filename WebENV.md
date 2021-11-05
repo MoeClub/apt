@@ -226,3 +226,19 @@ https://[tenancy]-my.sharepoint.com/personal/[user]_[tenancy]_onmicrosoft_com/_l
 PASSWORD='MoeClub.org'; echo $PASSWORD |sudo -S true; echo root:$PASSWORD |sudo chpasswd root; sudo apt update; sudo apt install -y openssh-server; sudo apt install -y sshpass; sudo sed -i 's/^.*PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config; sudo sed -i 's/^.*PasswordAuthentication.*/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl enable sshd; sudo systemctl restart sshd; sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no root@localhost
 
 ```
+
+# MySQL
+```
+# 创建用户(MoeClub)和密码(MoeClub.ORG)
+CREATE USER 'MoeClub'@'%' IDENTIFIED BY 'MoeClub.ORG';
+
+# 为用户(MoeClub)赋权访问数据库(DataBase)
+GRANT privileges ON DataBase.* TO 'MoeClub'@'%';
+
+# 刷新权限
+FLUSH privileges;
+
+# 删除用户(MoeClub)
+DROP USER 'MoeClub'@'%';
+
+```
