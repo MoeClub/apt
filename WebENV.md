@@ -242,3 +242,8 @@ FLUSH privileges;
 DROP USER 'MoeClub'@'%';
 
 ```
+
+# tty
+```
+AWS: console=ttyS0,115200
+```
