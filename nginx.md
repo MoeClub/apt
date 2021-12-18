@@ -1,6 +1,6 @@
 # debian 11
 ```
-apt install -y wget make gcc build-essential
+apt install -y wget make gcc build-essential xz-utils
 
 ```
 
