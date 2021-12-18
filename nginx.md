@@ -74,6 +74,8 @@ make install PREFIX=/usr/local/LuaJIT -j $(grep "cpu cores" /proc/cpuinfo | wc -
 --with-pcre=../pcre \
 --with-zlib=../zlib \
 --with-openssl=../openssl \
+--add-module=./debian/modules/http-subs-filter \
+--add-module=./debian/modules/http-ndk \
 --add-module=./debian/modules/http-lua
 
 make -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
