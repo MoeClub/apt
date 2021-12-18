@@ -33,6 +33,9 @@ wget -qO- http://security.debian.org/debian-security/pool/updates/main/l/luajit/
 cd ./luajit
 make install PREFIX=/usr/local/LuaJIT -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
 
+export LUAJIT_LIB=/usr/local/LuaJIT/lib
+export LUAJIT_INC=/usr/local/LuaJIT/include/luajit-2.0
+
 ```
 
 # nginx configure
