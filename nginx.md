@@ -1,3 +1,9 @@
+# debian 11
+```
+apt install -y wget make gcc build-essential
+
+```
+
 # nginx src
 ```
 # src nginx
