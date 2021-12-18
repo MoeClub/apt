@@ -68,8 +68,6 @@ export LUAJIT_INC=/usr/local/LuaJIT/include/luajit-2.0
 --with-http_slice_module \
 --with-http_ssl_module \
 --with-http_v2_module \
---with-stream=dynamic \
---with-stream_ssl_module \
 --without-http_geo_module \
 --without-http_userid_module \
 --without-http_memcached_module \
