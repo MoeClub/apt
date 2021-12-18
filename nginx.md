@@ -20,6 +20,15 @@ wget -qO- "https://zlib.net/fossils/zlib-1.2.11.tar.gz" | tar -zxv --strip-compo
 
 ```
 
+# luajit
+```
+rm -rf luajit; mkdir -p ./luajit
+wget -qO- http://security.debian.org/debian-security/pool/updates/main/l/luajit/luajit_2.0.4+dfsg.orig.tar.gz |tar -zxv --strip-components 1 -C ./luajit
+cd ./luajit
+make install PREFIX=/usr/local/LuaJIT -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
+
+```
+
 # nginx configure
 ```
 ./configure \
