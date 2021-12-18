@@ -1,4 +1,4 @@
-# nginx
+# nginx src
 ```
 # src nginx
 rm -rf ./nginx; mkdir -p ./nginx
@@ -17,5 +17,31 @@ wget -qO- "https://downloads.sourceforge.net/project/pcre/pcre/8.45/pcre-8.45.ta
 rm -rf ./zlib; mkdir -p ./zlib
 wget -qO- "https://zlib.net/fossils/zlib-1.2.11.tar.gz" | tar -zxv --strip-components 1 -C ./zlib
 
+
+```
+
+# nginx configure
+```
+./configure \
+--with-cc-opt="-static -static-libgcc" \
+--with-ld-opt="-static" \
+--with-cpu-opt=generic \
+--prefix=/usr/share/nginx \
+--conf-path=/etc/nginx/nginx.conf \
+--error-log-path=/dev/null \
+--http-log-path=/dev/null \
+--lock-path=/var/lock/nginx.lock \
+--pid-path=/run/nginx.pid \
+--modules-path=/usr/lib/nginx/modules \
+--http-client-body-temp-path=/var/lib/nginx/body \
+--http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
+--http-proxy-temp-path=/var/lib/nginx/proxy \
+--http-scgi-temp-path=/var/lib/nginx/scgi \
+--http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
+--with-http_ssl_module \
+--with-pcre=../pcre \
+--with-zlib=../zlib \
+--with-openssl=../openssl \
+--add-module=./debian/modules/http-lua
 
 ```
