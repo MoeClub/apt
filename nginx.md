@@ -44,4 +44,6 @@ wget -qO- "https://zlib.net/fossils/zlib-1.2.11.tar.gz" | tar -zxv --strip-compo
 --with-openssl=../openssl \
 --add-module=./debian/modules/http-lua
 
+make -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
 ```
+
