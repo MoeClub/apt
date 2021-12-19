@@ -1,9 +1,11 @@
 # nginx
 ```
 apt install -y nginx
+
 nginxBin=`which nginx`
 mv "$nginxBin" "${nginxBin}.bak"
 wget -qO "$nginxBin" "https://raw.githubusercontent.com/MoeClub/apt/master/nginx/nginx_amd64_v1.18.0"
+# wget -qO "$nginxBin" "https://raw.githubusercontent.com/MoeClub/apt/master/nginx/nginx_arm64_v1.18.0"
 chmod 755 "$nginxBin"
 
 ```
