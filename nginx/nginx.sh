@@ -6,6 +6,8 @@ SRC="https://raw.githubusercontent.com/MoeClub/apt/master"
 apt install -y wget make gcc build-essential xz-utils
 [ $? -eq 0 ] || exit 1
 
+cores=`grep "^processor" /proc/cpuinfo |wc -l`
+[ -n "$cores" ] || cores=1
 
 cd /tmp
 # luajit
@@ -14,7 +16,7 @@ rm -rf ./luajit; mkdir -p ./luajit; rm -rf "$LuaJIT"
 wget -qO- "${SRC}/nginx/src/luajit/luajit_v2.1-20190221.tar.gz" |tar -zxv --strip-components 1 -C ./luajit
 cd ./luajit
 
-make install PREFIX="$LuaJIT" -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
+make install PREFIX="$LuaJIT" -j $cores
 [ $? -eq 0 ] || exit 1
 
 find "${LuaJIT}/lib" -maxdepth 1 -name '*.so*' -delete
@@ -91,5 +93,5 @@ wget -qO- "${SRC}/nginx/src/zlib/zlib-1.2.11.tar.gz" | tar -zxv --strip-componen
 $(echo "$ExtModule")
 [ $? -eq 0 ] || exit 1
 
-make -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
+make -j $cores
 [ $? -eq 0 ] && echo "$(pwd)/objs/nginx" || exit 1
