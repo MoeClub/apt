@@ -9,14 +9,18 @@ apt install -y wget make gcc build-essential xz-utils
 
 cd /tmp
 # luajit
-rm -rf ./luajit; mkdir -p ./luajit; rm -rf /usr/local/LuaJIT
-wget -qO- "${SRC}/nginx/src/luajit/luajit_2.0.4.tar.gz" |tar -zxv --strip-components 1 -C ./luajit
+LuaJIT="/usr/local/LuaJIT"
+rm -rf ./luajit; mkdir -p ./luajit; rm -rf "$LuaJIT"
+wget -qO- "${SRC}/nginx/src/luajit/luajit_v2.1-20190221.tar.gz" |tar -zxv --strip-components 1 -C ./luajit
 cd ./luajit
-make install PREFIX=/usr/local/LuaJIT -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
+
+make install PREFIX="$LuaJIT" -j $(grep "cpu cores" /proc/cpuinfo | wc -l)
 [ $? -eq 0 ] || exit 1
 
-export LUAJIT_LIB=/usr/local/LuaJIT/lib
-export LUAJIT_INC=/usr/local/LuaJIT/include/luajit-2.0
+find "${LuaJIT}/lib" -maxdepth 1 -name '*.so*' -delete
+
+export LUAJIT_LIB="${LuaJIT}/lib"
+export LUAJIT_INC=`find "${LuaJIT}/include" -maxdepth 1 -type d -name "luajit-*" |sort -n |head -n1`
 
 
 cd /tmp
@@ -30,7 +34,8 @@ rm -rf ./modules; mkdir -p ./modules
 mkdir -p ./modules/http-subs-filter && wget -qO- "${SRC}/nginx/src/nginxModule/http-subs-filter_v0.6.4.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-subs-filter
 mkdir -p ./modules/http-echo && wget -qO- "${SRC}/nginx/src/nginxModule/http-echo_v0.62.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-echo
 mkdir -p ./modules/http-ndk && wget -qO- "${SRC}/nginx/src/nginxModule/http-ndk_v0.3.1.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-ndk
-mkdir -p ./modules/http-lua && wget -qO- "${SRC}/nginx/src/nginxModule/http-lua_v0.10.20.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-lua
+mkdir -p ./modules/http-lua && wget -qO- "${SRC}/nginx/src/nginxModule/http-lua_v0.10.14.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-lua
+#[ -f ./modules/http-lua/src/ngx_http_lua_module.c ] && sed -i 's/#ifndef OPENRESTY_LUAJIT/#ifdef OPENRESTY_LUAJIT/' ./modules/http-lua/src/ngx_http_lua_module.c
 
 ExtModule=""; for item in `find ./modules/ -maxdepth 1 -type d`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
 
