@@ -22,3 +22,9 @@ configure arguments: --with-cc-opt='-static -static-libgcc' --with-ld-opt=-stati
 root@debian:~# ldd /tmp/nginx/objs/nginx
         not a dynamic executable
 ```
+
+# build
+```
+wget -qO- https://github.com/MoeClub/apt/raw/master/nginx/nginx.sh |bash
+
+```
