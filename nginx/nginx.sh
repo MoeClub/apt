@@ -83,6 +83,8 @@ wget -qO- "${SRC}/nginx/src/zlib/zlib-1.2.11.tar.gz" | tar -zxv --strip-componen
 --with-http_slice_module \
 --with-http_ssl_module \
 --with-http_v2_module \
+--with-mail \
+--with-mail_ssl_module \
 --without-http_geo_module \
 --without-http_userid_module \
 --without-http_memcached_module \
