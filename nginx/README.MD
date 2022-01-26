@@ -28,3 +28,12 @@ root@debian:~# ldd /tmp/nginx/objs/nginx
 wget -qO- https://github.com/MoeClub/apt/raw/master/nginx/nginx.sh |bash
 
 ```
+
+# debian
+```
+apt remove --purge -y nginx nginx-common nginx-doc nginx-extras nginx-full nginx-light
+
+apt install -y nginx
+
+```
+
