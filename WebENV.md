@@ -247,3 +247,8 @@ DROP USER 'MoeClub'@'%';
 ```
 AWS: console=ttyS0,115200
 ```
+
+# Google Chrome CRX
+```
+https://clients2.google.com/service/update2/crx?response=redirect&prod=chromiumcrx&prodversion=100&acceptformat=crx3&x=installsource%3Dondemand%26uc%26id%3D<插件ID>
+```
