@@ -253,3 +253,17 @@ AWS: console=ttyS0,115200
 https://clients2.google.com/service/update2/crx?response=redirect&prod=chromiumcrx&prodversion=100&acceptformat=crx3&x=installsource%3Dondemand%26uc%26id%3D<插件ID>
 
 ```
+
+# SQLite3
+```
+CREATE TABLE `Table1` AS SELECT * FROM `Table0` WHERE 1=0;
+
+INSERT INTO `Table1` SELECT DISTINCT * FROM `Table0`;
+
+INSERT INTO `Table1` (字段1,字段2,.......) SELECT 字段1,字段2,...... FROM `Table0`;
+
+DROP TABLE `Table0`;
+
+ALTER TABLE `Table1` RENAME TO `Table0`;
+
+```
