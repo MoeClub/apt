@@ -270,6 +270,8 @@ ALTER TABLE `Table1` RENAME TO `Table0`;
 
 # Oracle Loader Image
 ```
+## console=tty1 console=ttyS0
+
 # Create Image
 dd if=/dev/sdb bs=32M status=progress |gzip -c9 >Oracle_ARM_47G_MoeClub.gz
 
