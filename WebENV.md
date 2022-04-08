@@ -267,3 +267,18 @@ DROP TABLE `Table0`;
 ALTER TABLE `Table1` RENAME TO `Table0`;
 
 ```
+
+# Oracle Loader Image
+```
+# Create Image
+dd if=/dev/sdb bs=32M status=progress |gzip -c9 >Oracle_ARM_47G_MoeClub.gz
+
+# Apply Image
+gzip -dc Oracle_ARM_47G_MoeClub.gz |dd of=/dev/sdb bs=32M status=progress
+
+# Apply With Online
+wget --no-check-certificate -qO- "<URL>" |gzip -dc |dd of=/dev/sdb bs=32M status=progress
+
+```
+
+
