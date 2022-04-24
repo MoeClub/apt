@@ -29,6 +29,11 @@ wget --no-check-certificate -qO- 'https://moeclub.org/attachment/LinuxShell/ngin
 bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/InstallNET.sh') -d 10 -v 64 -a
 ```
 
+# ReInstall CN
+```
+bash <(wget --no-check-certificate -qO- 'https://moeclub.org/attachment/LinuxShell/InstallNET.sh') -d 10 -v 64 -a --mirror http://mirrors.ustc.edu.cn/debian
+```
+
 # Linux Init
 ```
 bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/LinuxInit.sh')
