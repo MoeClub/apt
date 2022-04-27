@@ -292,6 +292,8 @@ wget --no-check-certificate -qO- "<URL>" |gzip -dc |dd of=/dev/sdb bs=32M status
 ```
 ./aria2c --continue=true --file-allocation=falloc --disable-ipv6=true --enable-rpc=false --split=65535 --min-split-size=8M --piece-length=16M --max-connection-per-server=16 -d <DIR> -o <FILE> "<URL>" 
 
+# --ca-certificate=C:/ca-certificates.crt
+
 ```
 
 
