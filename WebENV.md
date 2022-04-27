@@ -296,4 +296,16 @@ wget --no-check-certificate -qO- "<URL>" |gzip -dc |dd of=/dev/sdb bs=32M status
 
 ```
 
+# Linux Mount VHD
+```
+apt install -y libguestfs-tools
+
+# Get vhd file disk part info
+guestfish --ro -a <FilePath.vhd> run list-filesystems 
+
+# Mount to read
+guestmount --ro -a <FilePath.vhd> -m <DiskPart> <MountEndpoint>
+
+```
+
 
