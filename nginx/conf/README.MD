@@ -1,5 +1,6 @@
 # default
 ```
+apt install -y nginx
 bash <(wget -qO- https://github.com/MoeClub/apt/raw/master/nginx/conf/nginx.sh)
 
 ```
