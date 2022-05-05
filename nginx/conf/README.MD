@@ -7,3 +7,10 @@ mkdir -p /etc/nginx/conf.d /etc/nginx/sites-available
 wget -qO /etc/nginx/nginx.conf https://github.com/MoeClub/apt/raw/master/nginx/conf/nginx.conf
 
 ```
+
+# default
+```
+bash <(wget -qO- https://github.com/MoeClub/apt/raw/master/nginx/conf/nginx.sh)
+
+```
+
