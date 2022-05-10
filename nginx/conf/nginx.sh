@@ -19,5 +19,5 @@ chmod 755 "$nginxBin"
 
 # restart nginx
 systemctl restart nginx
-systemctl stauts nginx
+systemctl status nginx
 
