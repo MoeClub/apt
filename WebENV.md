@@ -318,5 +318,20 @@ guestfish --ro -a <FilePath.vhd>
 guestmount --ro -a <FilePath.vhd> -m <DiskPart> <MountEndpoint>
 
 ```
+# dpkg
+```
+# 修改文件时间
+chmod -R 755 ocserv
+find ocserv |xargs touch
 
+# 打包
+dpkg -b ocserv ocserv.deb
+
+# 解包文件
+dpkg -X ocserv.deb ocserv
+
+# 解包控制信息
+dpkg -e ocserv.deb ocserv/DEBIAN
+
+```
 
