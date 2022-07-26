@@ -242,6 +242,13 @@ PASSWORD='MoeClub.org'; echo $PASSWORD |sudo -S true; echo root:$PASSWORD |sudo 
 
 # MySQL
 ```
+# 数据库
+CREATE DATABASE <DatabaseName>;
+DROP DATABASE <DatabaseName>;
+
+# 查看用户
+SELECT User,Password FROM mysql.user;
+
 # 创建用户(MoeClub)和密码(MoeClub.ORG)
 CREATE USER 'MoeClub'@'%' IDENTIFIED BY 'MoeClub.ORG';
 
