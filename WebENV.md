@@ -345,3 +345,9 @@ dpkg -e ocserv.deb ocserv/DEBIAN
 
 ```
 
+# linux desktop
+```
+apt install -y xrdp gnome
+
+```
+
