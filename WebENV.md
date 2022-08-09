@@ -1,6 +1,6 @@
 # Debian ENV
 ```
-DEBIAN_FRONTEND=noninteractive apt-get install -y wget curl net-tools screen nload p7zip-full unzip vnstat gawk python3-pip ipset iftop
+DEBIAN_FRONTEND=noninteractive apt-get install -y openssl wget curl screen nload unzip vnstat gawk dnsutils net-tools p7zip-full python3-pip ipset iftop lsof
 
 ```
 
