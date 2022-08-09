@@ -1,6 +1,7 @@
-# Debian8 
+# Debian ENV
 ```
-DEBIAN_FRONTEND=noninteractive apt-get install -y curl screen nload p7zip-full nginx vnstat gawk spawn-fcgi libfcgi0ldbl fcgiwrap unzip mysql-server mysql-client php php-mysql php-cgi php-gd php-sqlite3 php-curl python3-pip ipset cadaver iftop
+DEBIAN_FRONTEND=noninteractive apt-get install -y wget curl net-tools screen nload p7zip-full unzip vnstat gawk python3-pip ipset iftop
+
 ```
 
 # Debian8/9 Kernel
