@@ -4,7 +4,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y wget curl net-tools screen nlo
 
 ```
 
-# BBR
+# Linux BBR
 ```
 bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/apt/master/bbr/bbr.sh')
 
