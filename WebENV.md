@@ -6,7 +6,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y openssl wget curl screen nload
 
 # Linux BBR
 ```
-bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/apt/master/bbr/bbr.sh')
+bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/apt/master/bbr/bbr.sh') 0 0
 
 ```
 
