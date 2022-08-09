@@ -145,8 +145,10 @@ scp -P 22 -r <DIR> user@host:<DIR>
 ## nvm install v8.9.0
 ## npm install --global gulp-cli
 
+rm -rf /usr/local/bin/node /usr/local/include/node /usr/local/lib/node_modules
+
 version="v16.16.0" && arch="arm64"
-wget -qO- "https://nodejs.org/dist/v16.16.0/node-${version}-linux-${arch}.tar.xz" ｜tar -xv --strip-components=1 -C /usr/local
+wget -qO- "https://nodejs.org/dist/v16.16.0/node-${version}-linux-${arch}.tar.xz" |tar -Jxv --strip-components=1 -C /usr/local
 
 ```
 
