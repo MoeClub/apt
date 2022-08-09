@@ -4,19 +4,17 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y wget curl net-tools screen nlo
 
 ```
 
-# Debian8/9 Kernel
+# BBR
 ```
-bash <(wget --no-check-certificate -qO- 'https://moeclub.org/attachment/LinuxShell/Debian_Kernel.sh')
+bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/apt/master/bbr/bbr.sh')
+
 ```
 
-# Debian8/9 LotServer
+# Debian Nginx
 ```
-bash <(wget --no-check-certificate -qO- https://github.com/MoeClub/lotServer/raw/master/Install.sh) uninstall
-```
+apt install -y nginx
+bash <(wget -qO- https://github.com/MoeClub/apt/raw/master/nginx/conf/nginx.sh)
 
-# Debian8/9 Nginx
-```
-wget --no-check-certificate -qO- 'https://moeclub.org/attachment/LinuxShell/nginx_update.sh' |bash
 ```
 
 # Linux limits
@@ -108,7 +106,7 @@ net.ipv4.tcp_no_metrics_save = 1
 net.ipv4.tcp_timestamps = 1
 net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.ip_forward = 1
-#net.core.default_qdisc = fq
+#net.core.default_qdisc = fq_codel
 #net.ipv4.tcp_congestion_control = bbr
 #net.ipv4.icmp_echo_ignore_all = 1
 #net.ipv6.conf.all.disable_ipv6 = 1
