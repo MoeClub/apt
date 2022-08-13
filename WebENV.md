@@ -4,6 +4,20 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y openssl wget curl screen nload
 
 ```
 
+# Debian PHP ENV
+```
+DEBIAN_FRONTEND=noninteractive apt-get install -y openssl wget curl screen nload unzip vnstat gawk dnsutils net-tools p7zip-full python3-pip ipset iftop lsof nginx mariadb-client mariadb-server php7.3 php7.3-fpm
+
+sed -i 's/^listen[[:space:]]*=.*/listen = 127.0.0.1:9000/' /etc/php/7.3/fpm/pool.d/www.conf
+sed -i 's/^;\?pm\.max_children[[:space:]]*=.*/pm\.max_children = 32/' /etc/php/7.3/fpm/pool.d/www.conf
+
+sed -i 's/^;\?emergency_restart_threshold[[:space:]]*=.*/emergency_restart_threshold = 5/' /etc/php/7.3/fpm/php-fpm.conf
+sed -i 's/^;\?emergency_restart_interval[[:space:]]*=.*/emergency_restart_interval = 300/' /etc/php/7.3/fpm/php-fpm.conf
+sed -i 's/^;\?process_control_timeout[[:space:]]*=.*/process_control_timeout = 180/' /etc/php/7.3/fpm/php-fpm.conf
+
+
+```
+
 # Linux BBR
 ```
 bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/apt/master/bbr/bbr.sh') 0 0
