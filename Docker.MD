@@ -14,6 +14,10 @@ docker pull vicer/app:debian9
 ```
 docker images
 ```
+# 移除镜像
+```
+docker rmi -f <ImageID>
+```
 # 打标签
 ```
 docker tag <ImageID> <UserName>/debian9:latest
