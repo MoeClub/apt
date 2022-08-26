@@ -33,6 +33,6 @@ docker logout
 ```
 # DockerFile
 ```
-docker build -t image:1.0 ./DockerFile
+docker build -t image:latest ./DockerFile
 ```
 
