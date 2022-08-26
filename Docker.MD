@@ -1,6 +1,7 @@
 # 安装
 ```
 curl -fsSL https://get.docker.com | bash -s docker
+wget -qO- https://raw.githubusercontent.com/MoeClub/Note/master/docker.sh |bash
 ```
 # 登陆
 ```
