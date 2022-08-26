@@ -26,3 +26,8 @@ docker push <UserName>/debian9:latest
 ```
 docker logout
 ```
+# DockerFile
+```
+docker build -t image:1.0 ./DockerFile
+```
+
