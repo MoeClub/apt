@@ -18,6 +18,7 @@ docker images
 # 移除镜像
 ```
 docker rmi -f <ImageID>
+docker images -a -q |xargs docker rmi -f
 ```
 # 打标签
 ```
