@@ -368,6 +368,7 @@ apt install -y xrdp gnome
 3. 对于每个旧分区 sector 信息都使用 `n` 创建新分区, 并且不移除分区签名.
 4. `w` 保存分区信息.
 5. `resize2fs -p /dev/sda2` 扩展到物理大小边界.
+6. 修改 /etc/fstab 文件 (可选) 
 
 ```
 
