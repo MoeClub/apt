@@ -365,10 +365,9 @@ apt install -y xrdp gnome
 # 将硬盘从47G无损扩展到100G
 1. `fdisk /dev/sda`
 2. `p` 打印分区信息, 方便查看 sector 信息.
-3. 对于旧分区 sector 信息使用 `n` 创建新分区, 不移除分区签名.
+3. 对于每个旧分区 sector 信息都使用 `n` 创建新分区, 并且不移除分区签名.
 4. `w` 保存分区信息.
 5. `resize2fs -p /dev/sda2` 扩展到物理大小边界.
-
 
 ```
 
