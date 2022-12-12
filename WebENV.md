@@ -372,3 +372,11 @@ apt install -y xrdp gnome
 
 ```
 
+# sshpass
+```
+mkdir -p "/tmp/sshpass"
+curl -sSL "https://fossies.org/linux/privat/sshpass-1.09.tar.gz" |tar -zxv --strip-components=1 -C /tmp/sshpass 
+cd /tmp/sshpass
+./configure && make install
+
+```
