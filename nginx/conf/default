@@ -1,13 +1,28 @@
 server {
 	listen 80 default_server;
-
+	# listen 443 ssl;
+	
+	server_name _;
+	
+	# ssl_certificate /etc/nginx/server.cert.pem;
+	# ssl_certificate_key /etc/nginx/server.key.pem;
+	# ssl_protocols TLSv1.3 TLSv1.2 TLSv1.1 TLSv1;
+	# ssl_ciphers EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5:!RC4;
+	# ssl_prefer_server_ciphers on;
+	# ssl_session_cache shared:SSL:16m;
+	# ssl_buffer_size 4k;
+	# ssl_stapling off;
+	# ssl_stapling_verify off;
+	
+	# autoindex off;
+	gzip off;
+	
 	root /var/www/html;
 	index index.html;
 
-	server_name _;
+	if ($scheme != "https") { return 302 "https://$host$request_uri"; }
 
 	location / {
-		gzip off;
 		try_files $uri $uri/ =404;
 	}
 	
@@ -26,7 +41,6 @@ server {
 	}
 
 	location ^~ /home {
-		gzip off;
 		if ($request_method !~ "GET|PROPFIND") { return 404; }
 		proxy_pass http://127.0.0.1:5189;
 	}
