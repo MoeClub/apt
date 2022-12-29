@@ -20,7 +20,7 @@ server {
 	root /var/www/html;
 	index index.html;
 
-	if ($scheme != "https") { return 302 "https://$host$request_uri"; }
+	# if ($scheme != "https") { return 302 "https://$host$request_uri"; }
 
 	location / {
 		try_files $uri $uri/ =404;
