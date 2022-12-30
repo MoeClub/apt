@@ -11,9 +11,8 @@ cores=`grep "^processor" /proc/cpuinfo |wc -l`
 
 cd /tmp
 # glibc
-glibcVer=2.31
 glibcPath="/tmp/glibc"
-wget --no-check-certificate -4 -qO glibc.tar.gz https://ftp.gnu.org/pub/gnu/glibc/glibc-${glibcVer}.tar.gz
+wget --no-check-certificate -4 -qO glibc.tar.gz https://ftp.gnu.org/pub/gnu/glibc/glibc-2.31.tar.gz
 rm -rf ./glibcBuild; rm -rf "$glibcPath"; mkdir -p "$glibcPath"
 mkdir -p ./glibcBuild; tar -xz -f glibc.tar.gz -C ./glibcBuild --strip-components=1;
 mkdir -p glibcBuild/build; cd glibcBuild/build
@@ -24,9 +23,7 @@ LDFLAGS="-static -static-libgcc -static-libstdc++ -s -pthread -lpthread" \
   --enable-static --enable-static-nss \
   --disable-nscd --disable-sanity-checks
 [ $? -eq 0 ] || exit 1 
-make -j$cores
-[ $? -eq 0 ] || exit 1 
-make install
+make install -j$cores
 find "$glibcPath/lib" ! -type d ! -name "*.a" -delete
 
 
@@ -35,7 +32,7 @@ cd /tmp
 LuaJIT="/tmp/LuaJIT"
 rm -rf ./luajitBuild; mkdir -p ./luajitBuild; rm -rf "$LuaJIT"; mkdir -p "$LuaJIT"
 wget -qO- "${SRC}/nginx/src/luajit/luajit_v2.1-20190221.tar.gz" |tar -zxv --strip-components 1 -C ./luajitBuild
-cd ./luajit
+cd ./luajitBuild
 
 make install PREFIX="$LuaJIT" -j $cores
 [ $? -eq 0 ] || exit 1
