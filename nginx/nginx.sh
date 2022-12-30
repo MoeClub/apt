@@ -84,6 +84,7 @@ wget -qO- "${SRC}/nginx/src/zlib/zlib-1.2.11.tar.gz" | tar -zxv --strip-componen
 --with-http_ssl_module \
 --with-http_v2_module \
 --with-http_dav_module \
+--with-http_stub_status_module \
 --with-stream \
 --with-stream_ssl_module \
 --with-stream_ssl_preread_module \
