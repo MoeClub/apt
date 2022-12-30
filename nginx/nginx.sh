@@ -12,7 +12,7 @@ cores=`grep "^processor" /proc/cpuinfo |wc -l`
 cd /tmp
 # glibc
 glibcPath="/tmp/glibc"
-wget --no-check-certificate -4 -qO glibc.tar.gz https://ftp.gnu.org/pub/gnu/glibc/glibc-2.31.tar.gz
+wget --no-check-certificate -4 -qO glibc.tar.gz https://ftp.gnu.org/pub/gnu/glibc/glibc-2.28.tar.gz
 rm -rf ./glibcBuild; rm -rf "$glibcPath"; mkdir -p "$glibcPath"
 mkdir -p ./glibcBuild; tar -xz -f glibc.tar.gz -C ./glibcBuild --strip-components=1;
 mkdir -p glibcBuild/build; cd glibcBuild/build
