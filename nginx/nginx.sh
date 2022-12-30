@@ -10,9 +10,31 @@ cores=`grep "^processor" /proc/cpuinfo |wc -l`
 [ -n "$cores" ] || cores=1
 
 cd /tmp
+# glibc
+glibcVer=2.31
+glibcPath="/tmp/glibc"
+wget --no-check-certificate -4 -O glibc.tar.gz https://ftp.gnu.org/pub/gnu/glibc/glibc-${glibcVer}.tar.gz
+rm -rf ./glibcBuild; rm -rf "$glibcPath"; mkdir -p "$glibcPath"
+mkdir -p ./glibcBuild; tar -xz -f glibc.tar.gz -C glibcBuild --strip-components=1;
+mkdir -p glibcBuild/build; cd glibcBuild/build
+CFLAGS="-I$glibcPath/include -ffloat-store -O2 --static" \
+LDFLAGS="-L$glibcPath/lib -L$glibcPath/lib64 -static -static-libgcc -static-libstdc++ -s -pthread -lpthread" \
+../configure \
+  --prefix=$glibcPath \
+  --enable-static --enable-static-nss \
+	--disable-nscd --disable-sanity-checks
+[ $? -eq 0 ] || exit 1 
+make -j$cores
+[ $? -eq 0 ] || exit 1 
+make install
+find "$glibcPath/lib" ! -type d ! -name "*.a" -delete
+
+exit 1
+
+cd /tmp
 # luajit
-LuaJIT="/usr/local/LuaJIT"
-rm -rf ./luajit; mkdir -p ./luajit; rm -rf "$LuaJIT"
+LuaJIT="/tmp/LuaJIT"
+rm -rf ./luajit; mkdir -p ./luajit; rm -rf "$LuaJIT"; mkdir -p "$LuaJIT"
 wget -qO- "${SRC}/nginx/src/luajit/luajit_v2.1-20190221.tar.gz" |tar -zxv --strip-components 1 -C ./luajit
 cd ./luajit
 
@@ -56,8 +78,8 @@ wget -qO- "${SRC}/nginx/src/zlib/zlib-1.2.11.tar.gz" | tar -zxv --strip-componen
 
 # build nginx
 ./configure \
---with-cc-opt="-static -static-libgcc" \
---with-ld-opt="-static" \
+--with-cc-opt="-I../glibc/include -static -static-libgcc -O2" \
+--with-ld-opt="-L../glibc/lib -L../glibc/lib64 -static" \
 --with-cpu-opt=generic \
 --prefix=/usr/share/nginx \
 --conf-path=/etc/nginx/nginx.conf \
@@ -88,6 +110,7 @@ wget -qO- "${SRC}/nginx/src/zlib/zlib-1.2.11.tar.gz" | tar -zxv --strip-componen
 --with-stream \
 --with-stream_ssl_module \
 --with-stream_ssl_preread_module \
+--with-file-aio \
 --without-http_geo_module \
 --without-http_userid_module \
 --without-http_memcached_module \
