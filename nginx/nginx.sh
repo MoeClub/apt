@@ -47,7 +47,7 @@ cd /tmp
 # nginx
 rm -rf ./nginx; mkdir -p ./nginx
 # wget -qO- "${SRC}/nginx/src/nginx/nginx_1.18.0.tar.gz" |tar -zxv --strip-components 1 -C ./nginx
-wget -qO- "${SRC}/nginx/src/nginx/nginx_1.22.1.tar.gz" |tar -zxv --strip-components 1 -C ./nginx
+wget -qO- "${SRC}/nginx/src/nginx/nginx-1.22.1.tar.gz" |tar -zxv --strip-components 1 -C ./nginx
 
 cd ./nginx
 rm -rf ./modules; mkdir -p ./modules
