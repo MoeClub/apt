@@ -15,7 +15,7 @@ glibcVer=2.31
 glibcPath="/tmp/glibc"
 wget --no-check-certificate -4 -qO glibc.tar.gz https://ftp.gnu.org/pub/gnu/glibc/glibc-${glibcVer}.tar.gz
 rm -rf ./glibcBuild; rm -rf "$glibcPath"; mkdir -p "$glibcPath"
-mkdir -p ./glibcBuild; tar -xz -f glibc.tar.gz -C glibcBuild --strip-components=1;
+mkdir -p ./glibcBuild; tar -xz -f glibc.tar.gz -C ./glibcBuild --strip-components=1;
 mkdir -p glibcBuild/build; cd glibcBuild/build
 CFLAGS="-ffloat-store -O2 --static" \
 LDFLAGS="-static -static-libgcc -static-libstdc++ -s -pthread -lpthread" \
@@ -33,8 +33,8 @@ find "$glibcPath/lib" ! -type d ! -name "*.a" -delete
 cd /tmp
 # luajit
 LuaJIT="/tmp/LuaJIT"
-rm -rf ./luajit; mkdir -p ./luajit; rm -rf "$LuaJIT"; mkdir -p "$LuaJIT"
-wget -qO- "${SRC}/nginx/src/luajit/luajit_v2.1-20190221.tar.gz" |tar -zxv --strip-components 1 -C ./luajit
+rm -rf ./luajitBuild; mkdir -p ./luajitBuild; rm -rf "$LuaJIT"; mkdir -p "$LuaJIT"
+wget -qO- "${SRC}/nginx/src/luajit/luajit_v2.1-20190221.tar.gz" |tar -zxv --strip-components 1 -C ./luajitBuild
 cd ./luajit
 
 make install PREFIX="$LuaJIT" -j $cores
