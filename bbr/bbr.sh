@@ -19,6 +19,7 @@ cat >/etc/sysctl.conf<<EOF
 fs.file-max = 104857600
 fs.nr_open = 1048576
 vm.overcommit_memory = 1
+vm.swappiness = 10
 net.core.somaxconn = 65535
 net.core.optmem_max = 262144
 net.core.rmem_max = 8388608
