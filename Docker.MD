@@ -36,4 +36,14 @@ docker logout
 ```
 docker build -t image:latest ./DockerFile
 ```
+# 测试
+```
+docker rm -f <DockerName>
+docker run --name <DockerName> --env XX=YY --privileged -p 60443:443 -d <ImageID>
+
+docker container list
+docker exec -it <ContainerID> /bin/bash
+
+```
+
 
