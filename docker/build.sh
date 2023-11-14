@@ -1,7 +1,9 @@
 #!/bin/bash
 
-dockerName="debian:latest"
-userName="$(docker info 2>/dev/null | sed 's/[[:space:]]//g' |grep '^Username' |cut -d':' -f2)"
+dockerName="${1:-debian:latest}"
+[ `echo "$dockerName" |sed 's/^://g' |sed 's/:$//g' |grep -c ':'` -ne 1 ] && echo "Invalid Docker Name." && exit 1
+
+userName="$(docker info 2>/dev/null |grep 'Username:' |cut -d':' -f2 |sed 's/[[:space:]]//g')"
 [ ! -n "$userName" ] && echo "No Found UserName." && exit 1
 
 dockerDir='./DockerFile'
@@ -39,4 +41,3 @@ docker images -a -q |xargs docker rmi -f >/dev/null 2>&1
 
 echo -e "${dockerId} --> ${remoteId}\n${userName}/${dockerName}\n"
 exit 0
-
