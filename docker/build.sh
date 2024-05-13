@@ -19,16 +19,17 @@ cat >"${dockerDir}/Dockerfile"<<EOF
 FROM debian:latest
 
 # 镜像操作命令
-RUN apt-get -yqq update && apt-get install -yqq wget openssl
+RUN apt-get -yqq update && apt-get install -yqq wget openssl procps
+
 
 # 容器启动命令
-CMD ["/bin/bash", "-c", "/usr/bin/wget --header 'timestamp: ${now}' -qO- 'http://localhost/install.sh' |/bin/bash"]
+CMD ["/bin/bash", "-c", "/usr/bin/wget --header 'timestamp: ${now}' -qO- 'http://localhost/install.sh' |/bin/bash -s 1"]
 
 
 EOF
 
 
-dockerId="$(docker build -t image:latest ./DockerFile 2>/dev/null |grep '^Successfully built' |sed 's/^Successfully built \([0-9a-z]*\)/\1/g')"
+dockerId=`docker build -t image:latest "$dockerDir" 2>/dev/null |grep '^Successfully built' |sed 's/^Successfully built \([0-9a-z]*\)/\1/g'`
 [ ! -n "$dockerId" ] && echo "Build Docker Image Fail." && exit 1
 
 docker tag "${dockerId}" "${userName}/${dockerName}"
