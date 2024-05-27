@@ -23,7 +23,7 @@ RUN apt-get -yqq update && apt-get install -yqq wget openssl procps
 
 
 # 容器启动命令
-CMD ["/bin/bash", "-c", "/usr/bin/wget --header 'timestamp: ${now}' -qO- 'http://localhost/install.sh' |/bin/bash -s 1"]
+CMD ["/bin/bash", "-c", "/bin/bash <(/usr/bin/wget --header 'timestamp: ${now}' -qO- 'http://localhost/install.sh') 1"]
 
 
 EOF
@@ -42,3 +42,5 @@ docker images -a -q |xargs docker rmi -f >/dev/null 2>&1
 
 echo -e "${dockerId} --> ${remoteId}\n${userName}/${dockerName}\n"
 exit 0
+
+
