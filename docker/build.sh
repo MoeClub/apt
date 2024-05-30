@@ -19,7 +19,7 @@ cat >"${dockerDir}/Dockerfile"<<EOF
 FROM debian:latest
 
 # 镜像操作命令
-RUN apt-get -yqq update && apt-get install -yqq wget openssl procps
+RUN apt-get -yqq update && apt-get install -yqq wget openssl procps netcat-traditional
 
 
 # 容器启动命令
