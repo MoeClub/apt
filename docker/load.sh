@@ -2,7 +2,7 @@
 
 Num="${1:-}"
 User="${2:-}"
-File="${3:-}"
+Name="${3:-}"
 [ -n "$User" ] && [ -n "Num" ] || exit 1
 
 Dir="/tmp/offline"
@@ -14,7 +14,7 @@ mkdir -p "${Dir}"
 
 for((i=0;i<$Num;i++)); do
   s=`printf %02d $i`;
-  n="${File}${s}";
+  n="${Name}${s}";
   u="https://raw.githubusercontent.com/${User}/main/${n}"
   wget -qO "${Dir}/${n}" "$u"
   [ $? == 0 ] || break
