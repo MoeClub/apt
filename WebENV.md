@@ -386,3 +386,22 @@ cd /tmp/sshpass
 ./configure && make install
 
 ```
+
+# bash string
+```
+# var 为变量名
+获取变量长度: ${#var}
+字符串截取: ${var:offset:length}
+转换成大写: ${var^^}
+转换成小写: ${var,,}
+
+# pattern 支持 *, ?, [] 等
+# string 可为空
+头部最短匹配剔除: ${var#pattern}
+头部最长匹配剔除: ${var##pattern}
+尾部最短匹配剔除: ${var%pattern}
+尾部最长匹配剔除: ${var%%pattern}
+任意最短匹配替换: ${var/pattern/string}
+任意最长匹配替换: ${var//pattern/string}
+
+```
