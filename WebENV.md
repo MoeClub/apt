@@ -414,4 +414,7 @@ wget -qO- http://crl.globalsign.com/gsgccr6alphasslca2023.crl |openssl crl -info
 # 利用 crt.sh 查看序列号对应的证书
 https://crt.sh/?serial=<OpenSSL列出的序列号>
 
+# 打印所有吊销的域名
+for serial in `wget -qO- http://crl.globalsign.com/gsgccr6alphasslca2023.crl |openssl crl -inform DER -noout -text |grep 'Serial Number:' |cut -d':' -f2 |grep -o '[0-9a-zA-Z]\+'`; do cid=`wget -qO- "https://crt.sh/?serial=${serial}" |grep -o 'href="?id=[0-9]\+"' |cut -d'"' -f2`; wget -qO- "https://crt.sh/${cid}" |grep -o 'DNS:[^<]\+'; done
+
 ```
