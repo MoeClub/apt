@@ -405,3 +405,13 @@ cd /tmp/sshpass
 任意最长匹配替换: ${var//pattern/string}
 
 ```
+
+# OpenSSL 查看吊销列表
+```
+# 查看AlphaSSL证书吊销列表:
+wget -qO- http://crl.globalsign.com/gsgccr6alphasslca2023.crl |openssl crl -inform DER -noout -text -nextupdate
+
+# 利用 crt.sh 查看序列号对应的证书
+https://crt.sh/?serial=<OpenSSL列出的序列号>
+
+```
