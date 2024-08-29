@@ -180,11 +180,11 @@ fdisk /dev/sdc #[g,n,w]
 mkfs -t ext4 /dev/sdc1
 
 mkdir -p /data
-dev=/dev/sdc1
+dev=`lsblk -no UUID /dev/sdc1`
 if [ -f /etc/fstab ]; then
   sed -i "/$(basename ${dev})/d" /etc/fstab
   while [ -z "$(sed -n '$p' /etc/fstab)" ]; do sed -i '$d' /etc/fstab; done
-  sed -i "\$a${dev}\t/data\text4\tdefaults,nofail,noatime,nodiratime,nobarrier\t0\t2\n\n" /etc/fstab
+  sed -i "\$aUUID=${dev}\t/data\text4\tdefaults,nofail,noatime,nodiratime,nobarrier\t0\t2\n\n" /etc/fstab
 fi
 
 # /dev/sdc /data ext4 defaults,nofail,noatime,nodiratime,nobarrier 0 2
