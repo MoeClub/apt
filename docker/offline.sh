@@ -14,7 +14,8 @@ docker save -o "${work}/_" "$image" >/dev/null 2>&1
 [ $? == 0 ] || exit 1
 # docker images -a -q |xargs docker rmi -f >/dev/null 2>&1
 
-split -b "$size" -d "${work}/_" "$name"
+cd "${work}"
+split -b "$size" -d "${work}/_" "$name" >/dev/null 2>&1
 [ $? == 0 ] || exit 1
 trap "rm -rf ${work}/_" EXIT
 echo "${work}"
