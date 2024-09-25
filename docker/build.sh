@@ -6,12 +6,10 @@ dockerName="${1:-debian:latest}"
 userName="$(docker info 2>/dev/null |grep 'Username:' |cut -d':' -f2 |sed 's/[[:space:]]//g')"
 [ ! -n "$userName" ] && echo "No Found UserName." && exit 1
 
-dockerDir='./DockerFile'
-
-rm -rf "${dockerDir}"
+dockerDir="$(mktemp -d)"; trap "rm -rf ${dockerDir}" EXIT
 now="$(date +%s)"
 
-mkdir -p "${dockerDir}"
+
 cat >"${dockerDir}/Dockerfile"<<EOF
 # Version 1.0
 
@@ -42,5 +40,3 @@ docker images -a -q |xargs docker rmi -f >/dev/null 2>&1
 
 echo -e "${dockerId} --> ${remoteId}\n${userName}/${dockerName}\n"
 exit 0
-
-
