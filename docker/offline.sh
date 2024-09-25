@@ -4,15 +4,15 @@ size="18M"
 image="${1:-}"
 name="${2:-}"
 [ -n "$image" ] || exit 1
-work="./docker.offline"
+work="$(mktemp -d)"
 
-docker pull "$image"
+docker pull "$image" >/dev/null 2>&1
 [ $? == 0 ] || exit 1
 
-rm -rf "${work}"; mkdir -p "${work}"; cd "${work}"
-docker save -o "${work}" "$image"
+cd "${work}"
+docker save -o "${work}/_" "$image" >/dev/null 2>&1
 # docker images -a -q |xargs docker rmi -f >/dev/null 2>&1
 
-split -b "$size" -d "${work}" "$name"
-
-[ $? == 0 ] && rm -rf "${work}" && ls *
+split -b "$size" -d "${work}/_" "$name"
+[ $? == 0 ] && echo "${work}" && rm -rf "${work}/_"  && exit 0 || rm -rf "${work}"
+exit 1
