@@ -20,6 +20,11 @@ docker images
 docker rmi -f <ImageID>
 docker images -a -q |xargs docker rmi -f
 ```
+# 将修改过的docker容器提交成镜像
+```
+docker -p commit <ContainerID> [REPOSITORY[:TAG]]
+
+```
 # 打标签
 ```
 docker tag <ImageID> <UserName>/debian9:latest
