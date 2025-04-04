@@ -418,3 +418,47 @@ https://crt.sh/?serial=<OpenSSL列出的序列号>
 for serial in `wget -qO- http://crl.globalsign.com/gsgccr6alphasslca2023.crl |openssl crl -inform DER -noout -text |grep 'Serial Number:' |cut -d':' -f2 |grep -o '[0-9a-zA-Z]\+'`; do cid=`wget -qO- "https://crt.sh/?serial=${serial}" |grep -o 'href="?id=[0-9]\+"' |cut -d'"' -f2`; wget -qO- "https://crt.sh/${cid}" |grep -o 'DNS:[^<]\+'; done
 
 ```
+
+# KS-LE-1, Raid
+```
+lsblk -o NAME,SIZE,TYPE,MOUNTPOINT,FSTYPE,UUID
+cat /etc/fstab
+cat /proc/mdstat
+
+
+# 从 md1 移除 sdb1
+mdadm --manage /dev/md1 --fail /dev/sdb1
+mdadm --manage /dev/md1 --remove /dev/sdb1
+
+# 将 md1 转换成 Raid0
+mdadm --grow /dev/md1 --level=0
+
+# 卸载 md1
+# umount /dev/md1
+# mdadm --stop /dev/md1
+# mdadm --zero-superblock /dev/sda1
+# sed -i '/=md1$/d' /etc/mdadm.conf 
+
+
+# 从 md2 移除 sdb2
+mdadm --manage /dev/md2 --fail /dev/sdb2
+mdadm --manage /dev/md2 --remove /dev/sdb2
+
+# 将 md2 转换成 Raid0
+mdadm --grow /dev/md2 --level=0
+
+# 格式化 /dev/sdb, 分区格式为 raid
+fdisk /dev/sdb
+
+# 将 sdb2 添加进 md2, 状态从 Raid0 变为 Raid4， 同步完成后自动变为 Raid0
+mdadm --grow /dev/md2 --level=0 --raid-devices=2 --add /dev/sdb1
+
+
+# 查看 md2 详情
+mdadm --misc --detail /dev/md2
+
+# 重置 md2 容量
+resize2fs /dev/md2
+
+```
+
