@@ -37,6 +37,7 @@ fetch_tgz "${SRC}/nginx/src/luajit/luajit-v${VERSION_LUAJIT}.tar.gz" "$WORKDIR/l
 cd "$WORKDIR/luajitBuild"
 mkdir -p "$WORKDIR/LuaJIT"
 make install -j`nproc` PREFIX="$WORKDIR/LuaJIT" BUILDMODE=static
+find "$WORKDIR/LuaJIT/lib" -maxdepth 1 -name '*.so*' -delete
 
 # openssl, pcre, zlib
 fetch_tgz "${SRC}/nginx/src/openssl/openssl-${VERSION_OPENSSL}.tar.gz" "$WORKDIR/openssl"
