@@ -65,7 +65,8 @@ ExtModule=""; for item in `find ./modules/ -maxdepth 1 -type d`; do echo "$item"
 
 # openssl
 rm -rf ../openssl; mkdir -p ../openssl
-wget -qO- "${SRC}/nginx/src/openssl/openssl-1.1.1k.tar.gz" |tar -zxv --strip-components 1 -C ../openssl
+# wget -qO- "${SRC}/nginx/src/openssl/openssl-1.1.1k.tar.gz" |tar -zxv --strip-components 1 -C ../openssl
+wget -qO- "${SRC}/nginx/src/openssl/openssl-1.1.1w.tar.gz" |tar -zxv --strip-components 1 -C ../openssl
 
 # pcre
 rm -rf ../pcre; mkdir -p ../pcre
