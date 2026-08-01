@@ -61,6 +61,7 @@ ExtModule=""; for item in `find ./modules/ -maxdepth 3 -type f -name "config" |x
 # patch
 if [ "$ENABLE_JA3" == "1" ]; then
     SSL_JA3_NGINX_PATCH="nginx.1.29.8.ssl.extensions.patch"
+    sed -i '/SSL_OP_NO_TICKET/d' "$WORKDIR/nginx/modules/ssl-ja3/patches/${SSL_JA3_NGINX_PATCH}"
     sed -i 's/OPENSSL_VERSION_NUMBER >= 0x30000000L/OPENSSL_VERSION_NUMBER >= 0x10101000L/' "$WORKDIR/nginx/modules/ssl-ja3/patches/${SSL_JA3_NGINX_PATCH}"
     patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-ja3/patches/${SSL_JA3_NGINX_PATCH}"
     grep -q 'ciphers_sz' "$WORKDIR/nginx/src/event/ngx_event_openssl.h"
