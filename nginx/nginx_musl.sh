@@ -33,7 +33,7 @@ apk add --no-cache build-base coreutils findutils linux-headers make musl-dev gr
 WORKDIR=`mktemp -d` && cd "$WORKDIR"
 
 # luajit
-fetch_tgz "${SRC}/nginx/src/luajit/luajit-v${VERSION_LUAJIT}.tar.gz" "$WORKDIR/luajitBuild"
+fetch_tgz "${SRC}/nginx/src/luajit/luajit_v${VERSION_LUAJIT}.tar.gz" "$WORKDIR/luajitBuild"
 cd "$WORKDIR/luajitBuild"
 mkdir -p "$WORKDIR/LuaJIT"
 make install -j`nproc` PREFIX="$WORKDIR/LuaJIT" BUILDMODE=static
