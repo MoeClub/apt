@@ -55,8 +55,10 @@ rm -rf ./modules; mkdir -p ./modules
 
 mkdir -p ./modules/http-subs-filter && wget -qO- "${SRC}/nginx/src/nginxModule/http-subs-filter_v0.6.4.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-subs-filter
 mkdir -p ./modules/http-echo && wget -qO- "${SRC}/nginx/src/nginxModule/http-echo_v0.62.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-echo
-mkdir -p ./modules/http-ndk && wget -qO- "${SRC}/nginx/src/nginxModule/http-ndk_v0.3.1.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-ndk
-mkdir -p ./modules/http-lua && wget -qO- "${SRC}/nginx/src/nginxModule/http-lua_v0.10.14.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-lua
+# mkdir -p ./modules/http-ndk && wget -qO- "${SRC}/nginx/src/nginxModule/http-ndk_v0.3.1.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-ndk
+mkdir -p ./modules/http-ndk && wget -qO- "${SRC}/nginx/src/nginxModule/http-ndk_v0.3.4.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-ndk
+# mkdir -p ./modules/http-lua && wget -qO- "${SRC}/nginx/src/nginxModule/http-lua_v0.10.14.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-lua
+mkdir -p ./modules/http-lua && wget -qO- "${SRC}/nginx/src/nginxModule/http-lua_v0.10.31.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-lua
 #[ -f ./modules/http-lua/src/ngx_http_lua_module.c ] && sed -i 's/#ifndef OPENRESTY_LUAJIT/#ifdef OPENRESTY_LUAJIT/' ./modules/http-lua/src/ngx_http_lua_module.c
 
 ExtModule=""; for item in `find ./modules/ -maxdepth 1 -type d`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
