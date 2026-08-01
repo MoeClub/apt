@@ -62,7 +62,8 @@ mkdir -p ./modules/http-lua && wget -qO- "${SRC}/nginx/src/nginxModule/http-lua_
 mkdir -p ./modules/http-njs && wget -qO- "${SRC}/nginx/src/nginxModule/http-njs-1.0.0.tar.gz" |tar -zxv --strip-components 1 -C ./modules/http-njs
 #[ -f ./modules/http-lua/src/ngx_http_lua_module.c ] && sed -i 's/#ifndef OPENRESTY_LUAJIT/#ifdef OPENRESTY_LUAJIT/' ./modules/http-lua/src/ngx_http_lua_module.c
 
-ExtModule=""; for item in `find ./modules/ -maxdepth 1 -type d`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
+ExtModule=""; for item in `find ./modules/ -maxdepth 3 -type f -name "config" |xargs dirname`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
+
 
 # openssl
 rm -rf ../openssl; mkdir -p ../openssl
