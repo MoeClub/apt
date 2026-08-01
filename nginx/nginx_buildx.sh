@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+dockerProject="nginx"
 dockerBase="alpine:3.20"
 dockerName="${dockerProject}_buildx"
 
