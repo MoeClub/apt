@@ -120,7 +120,7 @@ export NJS_LIBXSLT=NO
 make -j`nproc`
 
 [ $? -eq 0 ] && [ -f "$(pwd)/objs/nginx" ] || exit 1
-TARGET="nginx_${ARCH}_${VERSION_NGINX}"
+TARGET="nginx_${ARCH}_v${VERSION_NGINX}"
 [ "$ENABLE_JA3" == "1" ] && TARGET="${TARGET}_ja3"
 echo "$(pwd)/objs/nginx"
 cp -rf "$(pwd)/objs/nginx" "/mnt/${TARGET}"
