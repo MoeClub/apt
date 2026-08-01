@@ -80,7 +80,7 @@ wget -qO- "${SRC}/nginx/src/zlib/zlib-1.2.11.tar.gz" | tar -zxv --strip-componen
 
 
 # build nginx
-./configure \
+NJS_LIBXSLT=NO ./configure \
 --with-cc-opt="-I../glibc/include -static -static-libgcc" \
 --with-ld-opt="-L../glibc/lib -L../glibc/lib64 -static" \
 --with-cpu-opt=generic \
