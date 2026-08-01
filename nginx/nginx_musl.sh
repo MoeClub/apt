@@ -13,7 +13,7 @@ VERSION_LUAJIT="2.1-20190221"
 
 VERSION_NGX_SUBS="0.6.4"
 VERSION_NGX_NDK="0.3.1"
-VERSION_NGX_LUA="0.10.14"
+VERSION_NGX_LUA="0.10.14-1"
 VERSION_NGX_NJS="1.0.0"
 VERSION_NGX_JA3="0.1.0-alpha"
 ENABLE_JA3="${1:-0}"
@@ -23,7 +23,7 @@ case `apk --print-arch` in x86_64) ARCH="amd64";; aarch64) ARCH="arm64";; *) ARC
 [ -n "$ARCH" ] || exit 1
 
 fetch_tgz() {
-    url="$1"; dest="$2"; mkdir -p "$dest"
+    url="$1"; dest="$2"; mkdir -p "$dest"; echo "fetch: $url"
     wget --no-check-certificate -qO- "$url" | tar -zx --strip-components=1 -C "$dest"
 }
 
