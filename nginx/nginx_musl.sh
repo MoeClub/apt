@@ -16,7 +16,7 @@ VERSION_NGX_NDK="0.3.4"
 VERSION_NGX_LUA="0.10.31"
 VERSION_NGX_NJS="1.0.0"
 VERSION_NGX_JA3="0.1.0-alpha"
-ENABLE_JA3="${1:-0}"
+ENABLE_JA3="${1:-1}"
 
 
 case `apk --print-arch` in x86_64) ARCH="amd64";; aarch64) ARCH="arm64";; *) ARCH="";; esac
