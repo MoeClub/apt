@@ -1,7 +1,7 @@
 #!/bin/bash
 
 [ -d /etc/nginx ] || exit 1
-nginxVersion="1.30.4_ja3"
+nginxVersion="1.30.4_fp"
 
 src="https://github.com/MoeClub/apt/raw/refs/heads/master/nginx"
 
