@@ -15,7 +15,7 @@ VERSION_NGX_SUBS="0.6.4"
 VERSION_NGX_NDK="0.3.1"
 VERSION_NGX_LUA="0.10.14-1"
 VERSION_NGX_NJS="1.0.0"
-VERSION_NGX_FP="1.0.5"
+VERSION_NGX_FP="1.0.5_1"
 ENABLE_FP="${1:-1}"
 
 
@@ -40,7 +40,7 @@ make install -j`nproc` PREFIX="$WORKDIR/LuaJIT" BUILDMODE=static
 find "$WORKDIR/LuaJIT/lib" -maxdepth 1 -name '*.so*' -delete
 
 # openssl, pcre, zlib
-echo "$VERSION_OPENSSL" |grep -q '^1' && VerOpenSSL="OpenSSL_${ver//./_}" || VerOpenSSL="openssl-${ver}"
+echo "$VERSION_OPENSSL" |grep -q '^1' && VerOpenSSL="OpenSSL_${VERSION_OPENSSL//./_}" || VerOpenSSL="openssl-${VERSION_OPENSSL}"
 fetch_tgz "https://github.com/openssl/openssl/releases/download/${VerOpenSSL}/openssl-${VERSION_OPENSSL}.tar.gz" "$WORKDIR/openssl"
 fetch_tgz "${SRC}/nginx/src/pcre/pcre-${VERSION_PCRE}.tar.gz" "$WORKDIR/pcre"
 fetch_tgz "${SRC}/nginx/src/zlib/zlib-${VERSION_ZLIB}.tar.gz" "$WORKDIR/zlib"
@@ -62,8 +62,8 @@ ExtModule=""; for item in `find ./modules/ -maxdepth 3 -type f -name "config" |x
 
 # patch
 if [ "$ENABLE_FP" == "1" ]; then
-    patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-fp/patches/release-1.30.0.patch"
-    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.5.6.patch"
+    patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-fp/patches/release-1.30.4.patch"
+    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.5.7.patch"
 fi
 
 # build
@@ -119,7 +119,7 @@ make -j`nproc`
 
 [ $? -eq 0 ] && [ -f "$(pwd)/objs/nginx" ] || exit 1
 TARGET="nginx_${ARCH}_v${VERSION_NGINX}"
-[ "$ENABLE_FP" == "1" ] && TARGET="${TARGET}_ja3"
+[ "$ENABLE_FP" == "1" ] && TARGET="${TARGET}_fp"
 echo "$(pwd)/objs/nginx"
 cp -rf "$(pwd)/objs/nginx" "/mnt/${TARGET}"
 strip "/mnt/${TARGET}"
