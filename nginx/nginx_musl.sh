@@ -63,7 +63,7 @@ ExtModule=""; for item in `find ./modules/ -maxdepth 3 -type f -name "config" |x
 # patch
 if [ "$ENABLE_FP" == "1" ]; then
     patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-fp/patches/release-1.30.0.patch"
-    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.6.2.patch"
+    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.5.6.patch"
 fi
 
 # build
