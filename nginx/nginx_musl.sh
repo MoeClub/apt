@@ -6,17 +6,17 @@ SRC="https://raw.githubusercontent.com/MoeClub/apt/master"
 
 
 VERSION_NGINX="1.30.4"
-VERSION_OPENSSL="1.1.1w"
+VERSION_OPENSSL="3.5.7"
 VERSION_PCRE="8.45"
 VERSION_ZLIB="1.2.11"
-VERSION_LUAJIT="2.1-20190221"
+VERSION_LUAJIT="2.1-20250826"
 
 VERSION_NGX_SUBS="0.6.4"
 VERSION_NGX_NDK="0.3.1"
 VERSION_NGX_LUA="0.10.14-1"
 VERSION_NGX_NJS="1.0.0"
-VERSION_NGX_JA3="0.1.0-alpha"
-ENABLE_JA3="${1:-0}"
+VERSION_NGX_FP="1.0.5"
+ENABLE_FP="${1:-0}"
 
 
 case `apk --print-arch` in x86_64) ARCH="amd64";; aarch64) ARCH="arm64";; *) ARCH="";; esac
@@ -40,7 +40,8 @@ make install -j`nproc` PREFIX="$WORKDIR/LuaJIT" BUILDMODE=static
 find "$WORKDIR/LuaJIT/lib" -maxdepth 1 -name '*.so*' -delete
 
 # openssl, pcre, zlib
-fetch_tgz "${SRC}/nginx/src/openssl/openssl-${VERSION_OPENSSL}.tar.gz" "$WORKDIR/openssl"
+echo "$VERSION_OPENSSL" |grep -q '^1' && VerOpenSSL="OpenSSL_${ver//./_}" || VerOpenSSL="openssl-${ver}"
+fetch_tgz "https://github.com/openssl/openssl/releases/download/${VerOpenSSL}/openssl-${VERSION_OPENSSL}.tar.gz" "$WORKDIR/openssl"
 fetch_tgz "${SRC}/nginx/src/pcre/pcre-${VERSION_PCRE}.tar.gz" "$WORKDIR/pcre"
 fetch_tgz "${SRC}/nginx/src/zlib/zlib-${VERSION_ZLIB}.tar.gz" "$WORKDIR/zlib"
 
@@ -54,20 +55,15 @@ fetch_tgz "${SRC}/nginx/src/nginxModule/http-subs-filter_v${VERSION_NGX_SUBS}.ta
 fetch_tgz "${SRC}/nginx/src/nginxModule/http-ndk_v${VERSION_NGX_NDK}.tar.gz" "$WORKDIR/nginx/modules/http-ndk"
 fetch_tgz "${SRC}/nginx/src/nginxModule/http-lua_v${VERSION_NGX_LUA}.tar.gz" "$WORKDIR/nginx/modules/http-lua"
 fetch_tgz "${SRC}/nginx/src/nginxModule/http-njs-${VERSION_NGX_NJS}.tar.gz" "$WORKDIR/nginx/modules/http-njs"
-[ "$ENABLE_JA3" == "1" ] && fetch_tgz "${SRC}/nginx/src/nginxModule/ssl-ja3-v${VERSION_NGX_JA3}.tar.gz" "$WORKDIR/nginx/modules/ssl-ja3"
+[ "$ENABLE_FP" == "1" ] && fetch_tgz "${SRC}/nginx/src/nginxModule/ssl-fingerprint-${VERSION_NGX_FP}.tar.gz" "$WORKDIR/nginx/modules/ssl-fp"
 
 ExtModule=""; for item in `find ./modules/ -maxdepth 3 -type f -name "config" |xargs dirname`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
 
 
 # patch
-if [ "$ENABLE_JA3" == "1" ]; then
-    SSL_JA3_NGINX_PATCH="nginx.1.29.8.ssl.extensions.patch"
-    sed -i 's|SSL_set_options(sc->connection, SSL_OP_NO_TICKET);|/* SSL_set_options(sc->connection, SSL_OP_NO_TICKET); */|' "$WORKDIR/nginx/modules/ssl-ja3/patches/${SSL_JA3_NGINX_PATCH}"
-    sed -i 's/OPENSSL_VERSION_NUMBER >= 0x30000000L/OPENSSL_VERSION_NUMBER >= 0x10101000L/' "$WORKDIR/nginx/modules/ssl-ja3/patches/${SSL_JA3_NGINX_PATCH}"
-    patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-ja3/patches/${SSL_JA3_NGINX_PATCH}"
-    grep -q 'ciphers_sz' "$WORKDIR/nginx/src/event/ngx_event_openssl.h"
-    case "$VERSION_OPENSSL" in 3.*) SSL_JA3_OPENSSL_PATCH="openssl-3.extensions.patch";; *) SSL_JA3_OPENSSL_PATCH="openssl-1.1.1.extensions.patch";; esac
-    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-ja3/patches/${SSL_JA3_OPENSSL_PATCH}"
+if [ "$ENABLE_FP" == "1" ]; then
+    patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-fp/patches/release-1.30.0.patch"
+    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.6.2.patch"
 fi
 
 # build
@@ -123,7 +119,7 @@ make -j`nproc`
 
 [ $? -eq 0 ] && [ -f "$(pwd)/objs/nginx" ] || exit 1
 TARGET="nginx_${ARCH}_v${VERSION_NGINX}"
-[ "$ENABLE_JA3" == "1" ] && TARGET="${TARGET}_ja3"
+[ "$ENABLE_FP" == "1" ] && TARGET="${TARGET}_ja3"
 echo "$(pwd)/objs/nginx"
 cp -rf "$(pwd)/objs/nginx" "/mnt/${TARGET}"
 strip "/mnt/${TARGET}"
