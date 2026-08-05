@@ -39,6 +39,9 @@ mkdir -p "$WORKDIR/LuaJIT"
 make install -j`nproc` PREFIX="$WORKDIR/LuaJIT" BUILDMODE=static
 find "$WORKDIR/LuaJIT/lib" -maxdepth 1 -name '*.so*' -delete
 
+# quickjs
+## todo
+
 # openssl, pcre, zlib
 echo "$VERSION_OPENSSL" |grep -q '^1' && VerOpenSSL="OpenSSL_${VERSION_OPENSSL//./_}" || VerOpenSSL="openssl-${VERSION_OPENSSL}"
 fetch_tgz "https://github.com/openssl/openssl/releases/download/${VerOpenSSL}/openssl-${VERSION_OPENSSL}.tar.gz" "$WORKDIR/openssl"
@@ -50,6 +53,7 @@ fetch_tgz "${SRC}/nginx/src/zlib/zlib-${VERSION_ZLIB}.tar.gz" "$WORKDIR/zlib"
 fetch_tgz "${SRC}/nginx/src/nginx/nginx-${VERSION_NGINX}.tar.gz" "$WORKDIR/nginx"
 cd "$WORKDIR/nginx"
 mkdir -p ./modules
+
 
 fetch_tgz "${SRC}/nginx/src/nginxModule/http-subs-filter_v${VERSION_NGX_SUBS}.tar.gz" "$WORKDIR/nginx/modules/http-subs-filter"
 fetch_tgz "${SRC}/nginx/src/nginxModule/http-ndk_v${VERSION_NGX_NDK}.tar.gz" "$WORKDIR/nginx/modules/http-ndk"
@@ -111,6 +115,7 @@ export NJS_LIBXSLT=NO
     --without-http_userid_module \
     --without-http_memcached_module \
     --with-pcre=../pcre \
+    --with-pcre-opt='--enable-utf --enable-unicode-properties' \
     --with-pcre-jit \
     --with-zlib=../zlib \
     --with-openssl=../openssl \
