@@ -115,7 +115,7 @@ export NJS_LIBXSLT=NO
     --without-http_userid_module \
     --without-http_memcached_module \
     --with-pcre=../pcre \
-    --with-pcre-opt='--enable-utf --enable-unicode-properties' \
+    --with-pcre-opt='-DSUPPORT_UTF -DSUPPORT_UCP' \
     --with-pcre-jit \
     --with-zlib=../zlib \
     --with-openssl=../openssl \
