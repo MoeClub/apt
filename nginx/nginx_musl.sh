@@ -59,7 +59,7 @@ if [ "$ENABLE_FP" == "1" ]; then
     patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.5.7.patch"
 fi
 
-ExtModule=""; for item in `find ./modules/ -maxdepth 3 -type f -name "config" |xargs dirname`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
+ExtModule=""; for item in `find "$WORKDIR/nginx/modules" -maxdepth 3 -type f -name "config" |xargs dirname`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
 
 
 # libxml2
@@ -153,5 +153,3 @@ cp -rf "$(pwd)/objs/nginx" "${TAEGETDIR}/${TARGET}"
 strip "${TAEGETDIR}/${TARGET}"
 echo "${TAEGETDIR}/${TARGET}"
 "${TAEGETDIR}/${TARGET}" -V
-
-
