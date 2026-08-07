@@ -59,8 +59,6 @@ if [ "$ENABLE_FP" == "1" ]; then
     patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.5.7.patch"
 fi
 
-ExtModule=""; for item in `find "$WORKDIR/nginx/modules" -maxdepth 3 -type f -name "config" |xargs dirname`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
-
 
 # libxml2
 fetch_tar "${SRC}/nginx/src/quickjs/libxml2-${VERSION_XML2}.tar.xz" "$WORKDIR/xml2Build"
@@ -91,6 +89,7 @@ find "$WORKDIR/LuaJIT/lib" -maxdepth 1 -name '*.so*' -delete
 cd "$WORKDIR/nginx"
 export LUAJIT_LIB="$WORKDIR/LuaJIT/lib"
 export LUAJIT_INC=`find "$WORKDIR/LuaJIT/include" -maxdepth 1 -type d -name 'luajit-*' | sort | head -n 1`
+export ExtModule=""; for item in `find "./modules" -maxdepth 3 -type f -name "config" |xargs dirname`; do echo "$item" |grep -q '/$' || ExtModule="${ExtModule}--add-module=${item} "; done
 
 
 ./configure \
