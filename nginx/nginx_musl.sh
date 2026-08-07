@@ -148,7 +148,10 @@ TAEGETDIR="/mnt/nginx"
 TARGET="nginx_${ARCH}_v${VERSION_NGINX}"
 [ "$ENABLE_FP" == "1" ] && TARGET="${TARGET}_fp"
 echo "$(pwd)/objs/nginx"
+mkdir -p "${TAEGETDIR}"
 cp -rf "$(pwd)/objs/nginx" "${TAEGETDIR}/${TARGET}"
 strip "${TAEGETDIR}/${TARGET}"
 echo "${TAEGETDIR}/${TARGET}"
 "${TAEGETDIR}/${TARGET}" -V
+
+
