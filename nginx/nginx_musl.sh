@@ -18,7 +18,7 @@ VERSION_NGX_SUBS="0.6.4"
 VERSION_NGX_NDK="0.3.1"
 VERSION_NGX_LUA="0.10.14-1"
 VERSION_NGX_NJS="1.0.2"
-VERSION_NGX_FP="1.0.5_2"
+VERSION_NGX_FP="1.0.5_3"
 ENABLE_FP="${1:-1}"
 
 
@@ -55,8 +55,8 @@ fetch_tar "${SRC}/nginx/src/nginxModule/http-njs-${VERSION_NGX_NJS}.tar.gz" "$WO
 
 if [ "$ENABLE_FP" == "1" ]; then
     fetch_tar "${SRC}/nginx/src/nginxModule/ssl-fingerprint-${VERSION_NGX_FP}.tar.gz" "$WORKDIR/nginx/modules/ssl-fp"
-    patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-fp/patches/release-1.30.4.patch"
-    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.5.7.patch"
+    patch -p1 -d "$WORKDIR/nginx" < "$WORKDIR/nginx/modules/ssl-fp/patches/release-1.30.6.patch"
+    patch -p1 -d "$WORKDIR/openssl" < "$WORKDIR/nginx/modules/ssl-fp/patches/openssl-3.5.9.patch"
 fi
 
 
