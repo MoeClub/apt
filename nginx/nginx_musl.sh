@@ -5,7 +5,7 @@ set -eu
 SRC="https://raw.githubusercontent.com/MoeClub/apt/master"
 
 
-VERSION_NGINX="1.30.4"
+VERSION_NGINX="1.30.6"
 VERSION_OPENSSL="3.5.7"
 VERSION_PCRE="8.45"
 VERSION_ZLIB="1.2.11"
