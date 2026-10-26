@@ -32,7 +32,7 @@ fetch_tar() {
 }
 
 
-apk add --no-cache build-base coreutils findutils linux-headers make musl-dev grep perl sed tar wget xz
+apk add --no-cache build-base coreutils findutils linux-headers make pkgconf musl-dev grep perl sed tar wget xz
 
 WORKDIR=`mktemp -d` && cd "$WORKDIR"
 
